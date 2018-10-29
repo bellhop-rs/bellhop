@@ -1,0 +1,74 @@
+{{#*inline "base_header"}}
+    <a href="/types/{{asset_type.id}}">{{asset_type.name}}s</a> - {{asset.name}}
+{{/inline}}
+
+{{#*inline "content"}}
+    {{#if lease}}
+    <section>
+        <h2>Active Lease</h2>
+        <div>
+            <table class="pure-table">
+                <tbody>
+                    <tr>
+                        <th>Leased By</th>
+                        <td>{{lease.1.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Until</th>
+                        <td>
+                            <time datetime="{{lease.0.end_time}}">
+                                {{lease.0.end_time}}
+                            </time>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {{#if user_owns_lease}}
+            <form id="release-{{asset.id}}-form" action="/assets/{{asset.id}}/lease" method="POST" class="release-form pure-form pure-form-aligned">
+                <input name="_method" value="DELETE" type="hidden">
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button button-release">
+                        Release
+                    </button>
+                </div>
+            </form>
+            {{/if}}
+        </div>
+    </section>
+    {{else}}
+    <section>
+        <h2>Reserve</h2>
+        <div>
+            <form action="/assets/{{asset.id}}/lease" method="POST" class="reserve-form pure-form">
+                <fieldset>
+                    <input name="_method" value="PUT" type="hidden">
+                    <input placeholder="Until" type="text" name="end_time" autocomplete="off" required>
+                    <button type="submit" data-date-field="end_time" class="pure-button pure-button-primary date-button custom-button">
+                        Take
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+    </section>
+    {{/if}}
+    <section>
+        <h2>Tags</h2>
+        <div>
+            <table class="pure-table">
+                <tbody>
+                {{#each tags}}
+                <tr>
+                    <th>
+                        {{this.0.name}}
+                    </th>
+                    <td>
+                        {{this.1.value}}
+                    </td>
+                </tr>
+                </tbody>
+                {{/each}}
+            </table>
+        </div>
+    </section>
+{{/inline}}
+{{~> types/base }}

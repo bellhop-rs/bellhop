@@ -1,0 +1,14 @@
+{{#*inline "base_header"}}
+    Login
+{{/inline}}
+
+{{#*inline "content"}}
+    <form class="pure-form" action="/login" method="post">
+        Email:<br>
+        <input  type="text" name="email">
+        <br>
+        <br>
+        <input class="pure-button custom-button" type="submit" value="Submit">
+    </form>
+{{/inline}}
+{{~> types/base }}

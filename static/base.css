@@ -1,0 +1,148 @@
+body {
+    background-color: #5C2018;
+    color: #f3e0dc;
+}
+
+input[type="text"] {
+    color:black;
+}
+
+a {
+    color: #d4a59a;
+    text-decoration: none;
+}
+
+.assets-table {
+    width: 100%;
+}
+
+.logo {
+    background-image: url("/static/img/bellhop.svg");
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    margin: 2px;
+}
+
+.reservation-date-input {
+    margin: 2px;
+    margin-left: 5px;
+    width: 80px;
+}
+
+.reserve-form {
+    text-align: center;
+}
+
+.reserve-form .pure-button, .assets-table .pure-button {
+    width: 100%;
+}
+
+.my-asset-list .pure-button {
+    width: 100%;
+    margin: 6px;
+    background-color: #bc4639;
+    color: #f3e0dc;
+}
+
+.button-release {
+    background: #bc4639;
+    color: white;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 0.5em;
+    color: #71271D;
+}
+
+.footer-copyright a {
+    color: #802B20;
+    text-decoration: none;
+}
+
+@media (min-width: 48em)
+.menu-right {
+    float: right;
+}
+
+.custom-wrapper {
+    background-color: #BC4639;
+    margin-bottom: 1em;
+    -webkit-font-smoothing: antialiased;
+    height: 2.1em;
+    overflow: hidden;
+    -webkit-transition: height 0.5s;
+    -moz-transition: height 0.5s;
+    -ms-transition: height 0.5s;
+    transition: height 0.5s;
+}
+
+.custom-menu-3-right {
+    text-align: right;
+}
+
+.custom-menu-3-center {
+    text-align: center;
+}
+
+.custom-image {
+    padding: 2px;
+    height: 90%;
+}
+
+.custom-menu {
+    height: 100%;
+}
+
+.pure-menu-link {
+    color: white;
+}
+
+.pure-menu-active > .pure-menu-link, .pure-menu-link:focus, .pure-menu-link:hover {
+    background-color: #9B382D;
+}
+
+.pure-table td, .pure-table th {
+    border-color: #bc4639;
+}
+
+.pure-table {
+    border-color: #bc4639;
+}
+
+.pure-table thead, .pure-table th {
+    background-color: #bc4639;
+    color: #f3e0dc;
+}
+
+#menu > * {
+    height: 100%;
+}
+
+.custom-button {
+    background-color: #4285F4;
+    border-color: #4285F4;
+    color: white;
+}
+
+.datetip-holder h3 {
+    margin-top:0.5em;
+    margin-bottom:0.5em;
+}
+
+.datetip-submit {
+    margin-top:1em;
+}
+
+.datetip-holder {
+    padding:0.5em;
+}
+
+.tippy-tooltip {
+    font-size:1rem;
+}
+
+#footer {
+    margin-top:1em;
+    margin-bottom:1em;
+}

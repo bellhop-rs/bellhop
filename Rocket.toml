@@ -1,0 +1,2 @@
+[global.databases]
+bellhop = { url = "postgres://bellhop:bellhop@localhost/bellhop" }

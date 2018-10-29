@@ -1,0 +1,26 @@
+{{#*inline "base_header"}}
+    Reserve Asset of Type
+{{/inline}}
+
+{{#*inline "content"}}
+    <div>
+        <ul class="pure-menu-list">
+            {{#each asset_types}}
+                <li class="my-asset-list">
+                    <a class="pure-button" id="type-{{this.id}}" href="/types/{{this.id}}">
+                        {{this.name}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+        <a id="Request Access" href="/types" style="display: none">
+            <button class="pure-button custom-button">Request New Access</button>
+        </a>
+    </div>
+{{/inline}}
+{{~> types/base }}

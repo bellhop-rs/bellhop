@@ -1,0 +1,79 @@
+table! {
+    asset_types (id) {
+        id -> Int4,
+        name -> Varchar,
+    }
+}
+
+table! {
+    assets (id) {
+        id -> Int4,
+        type_id -> Int4,
+        lease_id -> Nullable<Int4>,
+        name -> Varchar,
+    }
+}
+
+table! {
+    jenkins_hooks (id) {
+        id -> Int4,
+        asset_type_id -> Int4,
+        hook_at -> Int2,
+        username -> Varchar,
+        token -> Varchar,
+        url -> Varchar,
+    }
+}
+
+table! {
+    leases (id) {
+        id -> Int4,
+        user_id -> Int4,
+        last_notified -> Nullable<Timestamptz>,
+        start_time -> Timestamptz,
+        end_time -> Timestamptz,
+    }
+}
+
+table! {
+    tag_types (id) {
+        id -> Int4,
+        asset_type_id -> Int4,
+        name -> Varchar,
+        detail_only -> Bool,
+        rightness -> Int4,
+    }
+}
+
+table! {
+    tags (asset_id, tag_type_id) {
+        asset_id -> Int4,
+        tag_type_id -> Int4,
+        value -> Varchar,
+    }
+}
+
+table! {
+    users (id) {
+        id -> Int4,
+        email -> Varchar,
+    }
+}
+
+joinable!(assets -> asset_types (type_id));
+joinable!(assets -> leases (lease_id));
+joinable!(jenkins_hooks -> asset_types (asset_type_id));
+joinable!(leases -> users (user_id));
+joinable!(tag_types -> asset_types (asset_type_id));
+joinable!(tags -> assets (asset_id));
+joinable!(tags -> tag_types (tag_type_id));
+
+allow_tables_to_appear_in_same_query!(
+    asset_types,
+    assets,
+    jenkins_hooks,
+    leases,
+    tag_types,
+    tags,
+    users,
+);

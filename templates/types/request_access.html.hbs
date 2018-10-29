@@ -1,0 +1,21 @@
+{{#*inline "base_header"}}
+    Asset Types
+{{/inline}}
+
+{{#*inline "content"}}
+    <div>
+        This page should list all asset types, specifying which ones you have access to and which ones you dont. You should be able to request access from this page.
+    <div>
+    <div>
+        <ul class="asset_type">
+            {{#each asset_types}}
+                <li class="type-list-item" >
+                    <a id="type-{{this.id}}" href="/types/{{this.id}}">
+                        {{this.name}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/inline}}
+{{~> types/base }}

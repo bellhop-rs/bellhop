@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="/static/img/bellhop_64.png">
+        <title>Bellhop</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css" integrity="sha384-b92sF+wDNTHrfEtRaYo+EpcA8FUyHOSXrdxKc9XB9kaaX1rSQAgMevW6cYeE5Bdv" crossorigin="anonymous">
+        <!--<![endif]-->
+
+        <link rel="stylesheet" href="/static/base.css">
+        <link rel="stylesheet" href="https://unpkg.com/tippy.js@3.2.0/dist/themes/light.css" integrity="sha384-vpTC9HNHXdmTDw84wTaMzMeFXI+E26v8Rze3bmP+LvpwjB4mcQFHUZ14vmzSKpcF" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/pikaday@1.8.0/css/pikaday.css" 
+            integrity="sha384-cZDepIuu+hcPLu1zVFkTK8fC0H1juWv6g51Jl4dkR/eq7pCuvUEIFsBHgJWxXByM" crossorigin="anonymous">
+    </head>
+
+    <body>
+        <div class="custom-wrapper pure-g" id = "menu">
+            <div class="pure-u-1 pure-u-md-1-3">
+                <div class="pure-menu pure-menu-horizontal">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link custom-menu-item">Home</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-3">
+                <div class="pure-menu custom-menu-3-center custom-menu">
+                    <img src="/static/img/bellhop_64.png" class="custom-image">
+                </div>
+            </div>
+            {{#if user}}
+            <div class="pure-u-1 pure-u-md-1-3">
+                <div class="pure-menu pure-menu-horizontal custom-menu-3-right">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/logout" class="pure-menu-link custom-menu-item">Logout</a></li>
+                        <li class="pure-menu-item"><a class="pure-menu-link custom-menu-item">{{user.email}}</a></li>
+                    </ul>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="pure-g" id="layout" >
+            <div class="pure-u pure-u-md-2-24 pure-u-lg-1-5"></div>
+            <div id="base_body" class="pure-u pure-u-md-20-24 pure-u-lg-3-5">
+                <h1>{{~> base_header }}</h1>
+                {{~> base_body }}
+            </div><!-- /#base_body -->
+            <div class="pure-u pure-u-md-2-24 pure-u-lg-1-5"></div>
+        </div><!-- /#layout -->
+        <div id="footer" class="pure-g">
+            <div class="pure-u pure-u-1 footer-copyright">
+                Bellhop logo by <a href="https://noct.zone/">dzuk</a>
+            </div><!-- /.pure-u -->
+        </div><!-- /#footer -->
+
+        <!-- Scripts which don't need to wait for the document to be loaded -->
+        <script src="https://unpkg.com/moment@2.22.2/moment.js" 
+            integrity="sha384-rCWDlX0ts8DR19RqjyA5Pi/rsyO1CtL0u3FwkCX9+shkYbnKVIkXceW5FARgCH6T" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/pikaday@1.8.0/pikaday.js" 
+            integrity="sha384-oC12pXlYf+782n2MUBMpg12ZxkZKURdxK79ZlTMqL58KDA9tO+39UcVPxkk+QYr/" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/tippy.js@3.2.0/dist/tippy.all.min.js"
+            integrity="sha384-t7hzFyIjw/ZbzxVHVohG8N42CR4LRshPsDdIXu6+yLkr/yfecfU/tBwpqLKJ5yd8"
+            crossorigin="anonymous"></script>
+        <script src="/static/base.js"></script>
+    </body>
+</html>

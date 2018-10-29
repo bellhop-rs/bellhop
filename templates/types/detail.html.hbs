@@ -1,0 +1,63 @@
+{{#*inline "base_header"}}
+    <!-- TODO: Store plural name in database -->
+    {{asset_type.name}}s
+{{/inline}}
+
+{{#*inline "content"}}
+<table class="pure-table assets-table">
+    <thead>
+        <tr>
+            <th>Asset</th>
+            {{#each tag_types}}
+                <th>{{this.name}}</th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each asset_tags as |asset_tag|}}
+            <tr>
+                <td>
+                    <a id="type-{{asset_tag.0.id}}" href="/assets/{{asset_tag.0.id}}" class="asset-name">
+                        {{asset_tag.0.name}}
+                    </a>
+                </td>
+                {{#each asset_tag.2 as |tag|}}
+                <td>
+                    {{#if tag}}
+                        {{tag.value}}
+                    {{/if}}
+                </td>
+                {{/each}}
+                {{#if asset_tag.1}}
+                <td>
+                    <form id="release-{{asset_tag.0.id}}-form" action="/assets/{{asset_tag.0.id}}/lease" method="POST" class="release-form">
+                        <input name="_method" value="DELETE" type="hidden">
+                        <div class="pure-controls">
+                            <button type="submit" class="pure-button button-release">
+                                Release
+                            </button>
+                        </div>
+                    </form>
+                </td>
+                {{else}}
+                <td>
+                    <form id="reserve-{{asset_tag.0.id}}-form" action="/assets/{{asset_tag.0.id}}/lease" method="POST" class="reserve-form">
+                        <input name="_method" value="PUT" type="hidden">
+                        <input type="text" name="end_time" id="type-{{asset_tag.0.id}}-date" class="reservation-date-input" autocomplete="off" required>
+                        <button
+                            type="submit"
+                            data-date-field="end_time"
+                            class="pure-button pure-button-primary date-button custom-button {{#if asset_tag.0.lease_id}}pure-button-disabled{{/if}}"
+                            {{#if asset_tag.0.lease_id}}disabled="disabled"{{/if}}>
+                            Take
+                        </button>
+                    </form>
+                </td>
+                {{/if}}
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/inline}}
+{{~> types/base }}
