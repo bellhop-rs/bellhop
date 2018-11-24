@@ -31,7 +31,7 @@ pub fn home(db: Db, mut cookies: Cookies) -> Result<Template> {
 }
 
 #[post("/", data = "<user>")]
-pub fn submit(
+pub(crate) fn submit(
     user: Form<CreateUser>,
     mut cookies: Cookies,
     db: Db,

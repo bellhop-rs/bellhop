@@ -56,7 +56,11 @@ impl User {
         Ok(user.pop())
     }
 
-    pub fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<User>> {
+    pub fn by_id<B, Conn>(c: &Conn, by_id: i32) -> Result<Option<User>>
+    where
+        Conn: Connection<Backend = B>,
+        B: diesel::backend::Backend<RawValue = [u8]>,
+    {
         use self::users::dsl::*;
 
         let mut user = users
@@ -79,7 +83,7 @@ impl User {
 
 #[derive(Debug, Deserialize, Insertable, TypedBuilder, FromForm)]
 #[table_name = "users"]
-pub struct CreateUser {
+pub(crate) struct CreateUser {
     email: String,
 }
 

@@ -1,15 +1,15 @@
 table! {
-    asset_types (id) {
+    assets (id) {
         id -> Int4,
+        type_id -> Int4,
+        lease_id -> Nullable<Int4>,
         name -> Varchar,
     }
 }
 
 table! {
-    assets (id) {
+    asset_types (id) {
         id -> Int4,
-        type_id -> Int4,
-        lease_id -> Nullable<Int4>,
         name -> Varchar,
     }
 }
@@ -30,8 +30,16 @@ table! {
         id -> Int4,
         user_id -> Int4,
         last_notified -> Nullable<Timestamptz>,
-        start_time -> Timestamptz,
         end_time -> Timestamptz,
+        start_time -> Timestamptz,
+    }
+}
+
+table! {
+    tags (asset_id, tag_type_id) {
+        asset_id -> Int4,
+        tag_type_id -> Int4,
+        value -> Varchar,
     }
 }
 
@@ -42,14 +50,6 @@ table! {
         name -> Varchar,
         detail_only -> Bool,
         rightness -> Int4,
-    }
-}
-
-table! {
-    tags (asset_id, tag_type_id) {
-        asset_id -> Int4,
-        tag_type_id -> Int4,
-        value -> Varchar,
     }
 }
 
@@ -69,11 +69,11 @@ joinable!(tags -> assets (asset_id));
 joinable!(tags -> tag_types (tag_type_id));
 
 allow_tables_to_appear_in_same_query!(
-    asset_types,
     assets,
+    asset_types,
     jenkins_hooks,
     leases,
-    tag_types,
     tags,
+    tag_types,
     users,
 );

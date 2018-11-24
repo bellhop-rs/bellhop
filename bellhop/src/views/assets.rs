@@ -1,6 +1,7 @@
 use crate::db::Db;
 use crate::errors::*;
-use crate::hooks::{run_hooks, HookPoint};
+use crate::hooks::Data as HookData;
+use crate::internal::hooks::Hooks;
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::{CreateLeaseForm, Lease};
@@ -14,7 +15,7 @@ use diesel::prelude::*;
 
 use rocket::http::Cookies;
 use rocket::http::Status;
-use rocket::request::Form;
+use rocket::request::{Form, State};
 use rocket::response::Redirect;
 
 use rocket_contrib::templates::Template;
@@ -26,11 +27,12 @@ Everything below is mouted under: "/assets"
 ******************************************/
 
 #[put("/<asset_id>/lease", data = "<form>")]
-pub fn create_lease(
+pub(crate) fn create_lease(
     asset_id: i32,
     form: Form<CreateLeaseForm>,
     db: Db,
     mut cookies: Cookies,
+    hooks: State<Hooks>,
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::assets::dsl::*;
 
@@ -48,28 +50,33 @@ pub fn create_lease(
 
     let to_update = assets.filter(id.eq(asset_id).and(lease_id.is_null()));
 
+    // TODO: Leaks leases when the update fails
     let updated: Option<Asset> = diesel::update(to_update)
         .set(lease_id.eq(Some(lease.id())))
         .get_result(&*db)
         .optional()
         .chain_err(|| "unable to update asset with new lease")?;
 
-    match updated {
-        Some(x) => {
-            let dest = format!("/assets/{}", x.id());
-            Ok(Some(Ok(Redirect::to(dest))))
-        }
-        None => Ok(Some(Err(Status::Conflict))),
-    }
+    let asset = match updated {
+        Some(x) => x,
+        None => return Ok(Some(Err(Status::Conflict))),
+    };
 
-    // TODO: Leaks leases when the update fails
+    let asset_type = AssetType::by_id(&*db, asset.type_id())?.chain_err(|| "missing asset_type")?;
+
+    let data = HookData::new(&lease, &asset, &asset_type);
+    hooks.leased(&*db, data)?;
+
+    let dest = format!("/assets/{}", asset.id());
+    Ok(Some(Ok(Redirect::to(dest))))
 }
 
 #[delete("/<asset_id>/lease")]
-pub fn delete_lease(
+pub(crate) fn delete_lease(
     asset_id: i32,
     db: Db,
     mut cookies: Cookies,
+    hooks: State<Hooks>,
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::leases::dsl as leases;
 
@@ -114,7 +121,10 @@ pub fn delete_lease(
         _ => return Ok(Some(Err(Status::Forbidden))),
     };
 
-    run_hooks(&*db, lease, asset, HookPoint::Returned)?;
+    let asset_type = AssetType::by_id(&*db, asset.type_id())?.chain_err(|| "missing asset_type")?;
+
+    let data = HookData::new(&lease, &asset, &asset_type);
+    hooks.returned(&*db, data)?;
 
     retval
 }

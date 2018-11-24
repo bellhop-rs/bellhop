@@ -21,8 +21,8 @@ pub struct Lease {
     user_id: i32,
 
     last_notified: Option<DateTime<Utc>>,
-    start_time: DateTime<Utc>,
     end_time: DateTime<Utc>,
+    start_time: DateTime<Utc>,
 }
 
 impl Lease {
@@ -51,7 +51,7 @@ impl Lease {
     }
 
     pub fn start_time(&self) -> DateTime<Utc> {
-        self.end_time
+        self.start_time
     }
 
     pub fn end_time(&self) -> DateTime<Utc> {
