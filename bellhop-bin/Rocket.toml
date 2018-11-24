@@ -1,2 +1,5 @@
+[global]
+template_dir = "../bellhop/templates"
+
 [global.databases]
 bellhop = { url = "postgres://bellhop:bellhop@localhost/bellhop" }

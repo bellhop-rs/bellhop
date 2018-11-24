@@ -1,0 +1,18 @@
+[package]
+name = "bellhop-hook-jenkins"
+version = "0.1.0"
+authors = [
+    "Joel Scarfone <jscarfon@akamai.com>",
+    "Sam Wilson <sawilson@akamai.com>",
+    "Tai Dickerson",
+]
+edition = "2018"
+license = "Apache-2.0"
+
+[dependencies]
+bellhop = { path = "../bellhop", version = "0.2.0" }
+diesel = { version = "1.0.0", default-features = false }
+reqwest = "0.9.5"
+
+serde = "1.0.80"
+serde_derive = "1.0.80"
