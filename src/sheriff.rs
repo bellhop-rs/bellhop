@@ -30,7 +30,7 @@ pub fn send_eviction_notices(c: &PgConnection) -> Result<()> {
                 .to((user.email(), "Bellhop User"))
                 // ... or by an address only
                 .from("sherrif.bellhop@example.com")
-                .subject("Bellhop Reservation Expiery Warning")
+                .subject("Bellhop Reservation Expiry Warning")
                 .text(format!("This is the bellhop Sherrif letting you know that your reservation (id: {}) is going to expire in {}! Best of luck.",user.id(),time_left))
                 .build()
                 .unwrap();
