@@ -14,6 +14,7 @@ extern crate serde_derive;
 #[macro_use]
 extern crate typed_builder;
 
+pub mod auth;
 mod db;
 mod errors;
 pub mod hooks;
@@ -23,8 +24,10 @@ mod schema;
 mod sheriff;
 mod views;
 
+use crate::auth::Auth;
 use crate::hooks::Hook;
 use crate::internal::hooks::Hooks;
+use crate::internal::auth::Auths;
 
 use diesel::prelude::*;
 
@@ -34,6 +37,7 @@ use rocket_contrib::templates::Template;
 #[derive(Debug, Default)]
 pub struct Bellhop {
     hooks: Hooks,
+    auths: Auths,
 }
 
 impl Bellhop {
@@ -45,9 +49,18 @@ impl Bellhop {
         self
     }
 
+    pub fn auth<A>(mut self, auth: A) -> Self
+    where
+        A: 'static + Send + Sync + Auth<<PgConnection as Connection>::Backend, PgConnection>,
+    {
+        self.auths.0.push(Box::new(auth));
+        self
+    }
+
     pub fn start(self) {
         rocket::ignite()
             .manage(self.hooks)
+            .manage(self.auths)
             .mount("/", routes![views::types::have_access])
             .mount("/", routes![views::favicon::favicon])
             .mount("/login", routes![views::login::home, views::login::submit])

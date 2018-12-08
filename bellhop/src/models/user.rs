@@ -1,10 +1,17 @@
+use crate::db::Db;
 use crate::errors::*;
 use crate::schema::users;
 use crate::views::login::LOGIN_COOKIE;
+use crate::internal::auth::Auths;
 
 use diesel::prelude::*;
 
 use rocket::http::Cookies;
+use rocket::request::{self, Request, FromRequest, State};
+use rocket::response::Redirect;
+use rocket::http::Status;
+use rocket::Outcome;
+
 use rocket_contrib::templates::Template;
 
 use std::result::Result as StdResult;
@@ -78,6 +85,38 @@ impl User {
 
     pub fn email(&self) -> &str {
         &self.email
+    }
+}
+
+impl<'a, 'r> FromRequest<'a, 'r> for User {
+    // TODO: Maybe switch to crate::errors::Error to get better debugging?
+    type Error = ();
+
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, ()> {
+        let auths = match request.guard::<State<Auths>>() {
+            Outcome::Success(x) => x,
+            Outcome::Failure(e) => return Outcome::Failure(e),
+            Outcome::Forward(f) => return Outcome::Forward(f),
+        };
+
+        let db = match request.guard::<Db>() {
+            Outcome::Success(x) => x,
+            Outcome::Failure(e) => return Outcome::Failure(e),
+            Outcome::Forward(f) => return Outcome::Forward(f),
+        };
+
+        for auth in auths.0.iter() {
+            let maybe_user = match auth.authenticate(&db, request) {
+                Ok(u) => u,
+                Err(_) => return Outcome::Failure((Status::InternalServerError, ())),
+            };
+
+            if let Some(user) = maybe_user {
+                return Outcome::Success(user);
+            }
+        }
+
+        Outcome::Failure((Status::Unauthorized, ()))
     }
 }
 
