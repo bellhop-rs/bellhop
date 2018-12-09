@@ -16,12 +16,7 @@ Everything below is mouted under: "/login"
 ******************************************/
 
 #[get("/")]
-pub fn home(db: Db, mut cookies: Cookies) -> Result<Template> {
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(template) => return Ok(template),
-    };
-
+pub fn home(db: Db, user: User) -> Result<Template> {
     #[derive(Serialize)]
     struct Context {
         user: User,

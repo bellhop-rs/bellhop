@@ -22,13 +22,8 @@ Everything below is mouted under: "/"
 ******************************************/
 
 #[get("/")]
-pub fn have_access(db: Db, mut cookies: Cookies) -> Result<Template> {
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(template) => return Ok(template),
-    };
-
-    // TODO: user user_id_cookie to get only assets you have access to...
+pub fn have_access(db: Db, user: User) -> Result<Template> {
+    // TODO: use user_id to get only assets you have access to...
 
     let asset_types = get_all_types(&db)?;
 
@@ -49,13 +44,8 @@ Everything below is mouted under: "/types"
 ******************************************/
 
 #[get("/")]
-pub fn request_access(db: Db, mut cookies: Cookies) -> Result<Template> {
+pub fn request_access(db: Db, user: User) -> Result<Template> {
     let asset_types = get_all_types(&db)?;
-
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(template) => return Ok(template),
-    };
 
     #[derive(Serialize)]
     struct Context {
@@ -70,18 +60,13 @@ pub fn request_access(db: Db, mut cookies: Cookies) -> Result<Template> {
 }
 
 #[get("/<asset_type_id>")]
-pub fn detail(asset_type_id: i32, db: Db, mut cookies: Cookies) -> Result<Option<Template>> {
+pub fn detail(asset_type_id: i32, db: Db, user: User) -> Result<Option<Template>> {
     use crate::schema::leases::dsl as leases;
     use crate::schema::tag_types::dsl as tt;
 
     let asset_type = match AssetType::by_id(&db, asset_type_id)? {
         Some(x) => x,
         None => return Ok(None),
-    };
-
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(template) => return Ok(Some(template)),
     };
 
     let now = Utc::now();
