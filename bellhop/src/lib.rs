@@ -58,9 +58,7 @@ impl Bellhop {
     }
 
     pub fn start(self) {
-        rocket::ignite()
-            .manage(self.hooks)
-            .manage(self.auths)
+        let mut r = rocket::ignite()
             .mount("/", routes![views::types::have_access])
             .mount("/", routes![views::favicon::favicon])
             .mount("/login", routes![views::login::home, views::login::submit])
@@ -84,7 +82,14 @@ impl Bellhop {
             )
             .mount("/", routes![views::endpoints::sheriff])
             .attach(Template::fairing())
-            .attach(db::Db::fairing())
+            .attach(db::Db::fairing());
+
+        for auth in self.auths.0.iter() {
+            r = auth.prelaunch(r);
+        }
+
+        r.manage(self.hooks)
+            .manage(self.auths)
             .launch();
     }
 }

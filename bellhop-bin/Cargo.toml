@@ -7,5 +7,6 @@ license = "Apache-2.0"
 
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.2.0" }
+bellhop-auth-dummy = { path = "../bellhop-auth-dummy", version = "0.1.0" }
 bellhop-hook-jenkins = { path = "../bellhop-hook-jenkins", version = "0.1.0" }
 bellhop-hook-email = { path = "../bellhop-hook-email", version = "0.1.0" }
