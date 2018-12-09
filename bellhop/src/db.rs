@@ -1,7 +1,5 @@
 use crate::models::asset_type::AssetType;
-use crate::models::lease::Lease;
 use crate::schema::asset_types;
-use crate::schema::leases;
 
 use rocket_contrib::databases::diesel;
 
@@ -20,14 +18,4 @@ pub fn get_all_types(c: &PgConnection) -> Result<Vec<AssetType>> {
         .chain_err(|| "failed to find user by email")?;
 
     Ok(all_asset_types)
-}
-
-pub fn get_all_leases(c: &PgConnection) -> Result<Vec<Lease>> {
-    use self::leases::dsl::*;
-
-    let all_leases: Vec<Lease> = leases
-        .load::<Lease>(c)
-        .chain_err(|| "failed to find user by email")?;
-
-    Ok(all_leases)
 }

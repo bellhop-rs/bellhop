@@ -1,20 +1,13 @@
 use crate::db::Db;
 use crate::errors::*;
 use crate::schema::users;
-use crate::views::login::LOGIN_COOKIE;
 use crate::internal::auth::Auths;
 
 use diesel::prelude::*;
 
-use rocket::http::Cookies;
 use rocket::request::{self, Request, FromRequest, State};
-use rocket::response::Redirect;
 use rocket::http::Status;
 use rocket::Outcome;
-
-use rocket_contrib::templates::Template;
-
-use std::result::Result as StdResult;
 
 #[derive(Debug, Serialize, Queryable, Identifiable, PartialEq)]
 pub struct User {

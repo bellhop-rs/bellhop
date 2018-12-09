@@ -16,7 +16,7 @@ Everything below is mouted under: "/login"
 ******************************************/
 
 #[get("/")]
-pub fn home(db: Db, user: User) -> Result<Template> {
+pub fn home(user: User) -> Result<Template> {
     #[derive(Serialize)]
     struct Context {
         user: User,

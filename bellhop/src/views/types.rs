@@ -11,11 +11,9 @@ use chrono::prelude::*;
 
 use diesel::prelude::*;
 
-use rocket::http::Cookies;
 use rocket_contrib::templates::Template;
 
 use std::collections::HashMap;
-use std::result::Result as StdResult;
 
 /*****************************************
 Everything below is mouted under: "/"
