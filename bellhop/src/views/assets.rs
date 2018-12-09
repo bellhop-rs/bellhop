@@ -13,7 +13,6 @@ use crate::schema::leases;
 use diesel;
 use diesel::prelude::*;
 
-use rocket::http::Cookies;
 use rocket::http::Status;
 use rocket::request::{Form, State};
 use rocket::response::Redirect;

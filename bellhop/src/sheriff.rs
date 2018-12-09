@@ -1,11 +1,9 @@
-use crate::db;
 use crate::errors::*;
 use crate::hooks::Data as HookData;
 use crate::internal::hooks::Hooks;
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
-use crate::models::user::User;
 
 use diesel;
 use diesel::prelude::*;
@@ -14,7 +12,6 @@ use chrono::prelude::*;
 
 pub(crate) fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<()> {
     use crate::schema::asset_types::dsl as at;
-    use crate::schema::assets::dsl as a;
     use crate::schema::leases::dsl as l;
 
     let now = Utc::now();
