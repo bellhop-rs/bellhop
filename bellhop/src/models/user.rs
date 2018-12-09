@@ -23,34 +23,6 @@ pub struct User {
 }
 
 impl User {
-    pub fn from_current_cookies(
-        c: &PgConnection,
-        cookies: &mut Cookies,
-    ) -> Result<StdResult<User, Template>> {
-        let user_id_cookie = match cookies.get_private(LOGIN_COOKIE) {
-            Some(x) => x,
-            None => return Ok(StdResult::Err(Template::render("login/home", ""))),
-        };
-
-        println!(
-            "COOKIE: {:?} (value raw is: '{:?}')",
-            user_id_cookie,
-            user_id_cookie.value()
-        );
-
-        let user_id = match user_id_cookie.value().parse::<i32>() {
-            Ok(x) => x,
-            Err(e) => bail!("Error parsing cookie value as user_id: {}", e),
-        };
-
-        let user = match User::by_id(c, user_id)? {
-            Some(x) => x,
-            None => bail!("No user for id: {}", user_id),
-        };
-
-        Ok(StdResult::Ok(user))
-    }
-
     pub fn by_email(c: &PgConnection, by_email: &str) -> Result<Option<User>> {
         use self::users::dsl::*;
 

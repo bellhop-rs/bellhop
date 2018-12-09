@@ -31,15 +31,10 @@ pub(crate) fn create_lease(
     asset_id: i32,
     form: Form<CreateLeaseForm>,
     db: Db,
-    mut cookies: Cookies,
+    user: User,
     hooks: State<Hooks>,
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::assets::dsl::*;
-
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(_) => return Ok(Some(Err(Status::Forbidden))),
-    };
 
     let create_lease = form.into_inner().into_create_lease(user.id());
 
@@ -75,15 +70,10 @@ pub(crate) fn create_lease(
 pub(crate) fn delete_lease(
     asset_id: i32,
     db: Db,
-    mut cookies: Cookies,
+    user: User,
     hooks: State<Hooks>,
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::leases::dsl as leases;
-
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(_) => return Ok(Some(Err(Status::Forbidden))),
-    };
 
     let asset = match Asset::by_id(&db, asset_id)? {
         Some(x) => x,
@@ -130,14 +120,9 @@ pub(crate) fn delete_lease(
 }
 
 #[get("/<asset_id>")]
-pub fn detail(asset_id: i32, db: Db, mut cookies: Cookies) -> Result<Option<Template>> {
+pub fn detail(asset_id: i32, db: Db, user: User) -> Result<Option<Template>> {
     use crate::schema::tag_types::dsl as tt;
     use crate::schema::tags::dsl as t;
-
-    let user = match User::from_current_cookies(&db, &mut cookies)? {
-        StdResult::Ok(x) => x,
-        StdResult::Err(template) => return Ok(Some(template)),
-    };
 
     let asset = match Asset::by_id(&db, asset_id)? {
         Some(x) => x,
