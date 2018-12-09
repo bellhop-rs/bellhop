@@ -16,13 +16,17 @@ Everything below is mouted under: "/login"
 ******************************************/
 
 #[get("/")]
-pub fn home(user: User) -> Result<Template> {
-    #[derive(Serialize)]
-    struct Context {
-        user: User,
-    }
+pub fn home(user: Option<User>) -> Result<Template> {
+    if let Some(user) = user {
+        #[derive(Serialize)]
+        struct Context {
+            user: User,
+        }
 
-    Ok(Template::render("types/have_access", Context { user }))
+        Ok(Template::render("types/have_access", Context { user }))
+    } else {
+        Ok(Template::render("login/home", ()))
+    }
 }
 
 #[post("/", data = "<user>")]

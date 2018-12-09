@@ -87,10 +87,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "bellhop-auth-dummy"
+version = "0.1.0"
+dependencies = [
+ "bellhop 0.2.0",
+ "diesel 1.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "bellhop-bin"
 version = "0.1.0"
 dependencies = [
  "bellhop 0.2.0",
+ "bellhop-auth-dummy 0.1.0",
  "bellhop-hook-email 0.1.0",
  "bellhop-hook-jenkins 0.1.0",
 ]

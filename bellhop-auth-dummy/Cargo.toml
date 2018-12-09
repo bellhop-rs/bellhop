@@ -1,0 +1,15 @@
+[package]
+name = "bellhop-auth-dummy"
+version = "0.1.0"
+authors = [
+    "Joel Scarfone <jscarfon@akamai.com>",
+    "Sam Wilson <sawilson@akamai.com>",
+    "Tai Dickerson",
+]
+edition = "2018"
+license = "Apache-2.0"
+
+[dependencies]
+bellhop = { path = "../bellhop", version = "0.2.0" }
+rocket = "0.4.0"
+diesel = { version = "1.0.0", default-features = false }

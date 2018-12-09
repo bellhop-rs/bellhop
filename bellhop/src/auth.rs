@@ -1,5 +1,6 @@
 use crate::models::user::User;
 
+use rocket::Rocket;
 use rocket::request::Request;
 
 use std::fmt;
@@ -60,7 +61,9 @@ impl StdError for Error {
 }
 
 pub trait Auth<B, Conn>: fmt::Debug {
-    fn authenticate(&self, _conn: &Conn, _req: &Request) -> Result<Option<User>, Error> {
-        Ok(None)
+    fn prelaunch(&self, rocket: Rocket) -> Rocket {
+        rocket
     }
+
+    fn authenticate(&self, _conn: &Conn, _req: &Request) -> Result<Option<User>, Error>;
 }

@@ -1,3 +1,11 @@
 [workspace]
-members = ["bellhop", "bellhop-bin", "bellhop-hook-jenkins", "bellhop-hook-email"]
+members = [
+    "bellhop",
+    "bellhop-bin",
+
+    "bellhop-hook-jenkins",
+    "bellhop-hook-email",
+
+    "bellhop-auth-dummy",
+]
 default-members = ["bellhop-bin"]
