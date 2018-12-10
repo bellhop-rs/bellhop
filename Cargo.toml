@@ -7,5 +7,6 @@ members = [
     "bellhop-hook-email",
 
     "bellhop-auth-dummy",
+    "bellhop-auth-header",
 ]
 default-members = ["bellhop-bin"]
