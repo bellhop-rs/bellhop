@@ -16,7 +16,11 @@ pub struct User {
 }
 
 impl User {
-    pub fn by_email(c: &PgConnection, by_email: &str) -> Result<Option<User>> {
+    pub fn by_email<B, Conn>(c: &Conn, by_email: &str) -> Result<Option<User>>
+    where
+        Conn: Connection<Backend = B>,
+        B: diesel::backend::Backend<RawValue = [u8]>,
+    {
         use self::users::dsl::*;
 
         let mut user = users
