@@ -1,3 +1,4 @@
+use crate::db::Db as PubDb;
 use crate::internal::db::Db;
 use crate::errors::*;
 use crate::schema::users;
@@ -16,33 +17,26 @@ pub struct User {
 }
 
 impl User {
-    pub fn by_email<B, Conn>(c: &Conn, by_email: &str) -> Result<Option<User>>
-    where
-        Conn: Connection<Backend = B>,
-        B: diesel::backend::Backend<RawValue = [u8]>,
-    {
+    pub fn by_email(c: &PubDb, by_email: &str) -> Result<Option<User>> {
         use self::users::dsl::*;
 
         let mut user = users
             .filter(email.eq(by_email))
             .limit(1)
-            .load::<User>(c)
+            .load::<User>(c.db())
             .chain_err(|| "failed to find user by email")?;
 
         Ok(user.pop())
     }
 
-    pub fn by_id<B, Conn>(c: &Conn, by_id: i32) -> Result<Option<User>>
-    where
-        Conn: Connection<Backend = B>,
-        B: diesel::backend::Backend<RawValue = [u8]>,
+    pub fn by_id(c: &PubDb, by_id: i32) -> Result<Option<User>>
     {
         use self::users::dsl::*;
 
         let mut user = users
             .filter(id.eq(by_id))
             .limit(1)
-            .load::<User>(c)
+            .load::<User>(c.db())
             .chain_err(|| "failed to find user by id")?;
 
         Ok(user.pop())
@@ -75,7 +69,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for User {
         };
 
         for auth in auths.0.iter() {
-            let maybe_user = match auth.authenticate(&db, request) {
+            let maybe_user = match auth.authenticate(&(&db).into(), request) {
                 Ok(u) => u,
                 Err(_) => return Outcome::Failure((Status::InternalServerError, ())),
             };

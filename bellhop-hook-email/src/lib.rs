@@ -1,7 +1,6 @@
 use bellhop::hooks::{Data, Error, ErrorKind, Hook};
 use bellhop::models::user::User;
-
-use diesel::prelude::*;
+use bellhop::db::Db;
 
 use lettre::{ClientSecurity, SmtpClient, Transport};
 
@@ -10,12 +9,8 @@ use lettre_email::EmailBuilder;
 #[derive(Debug)]
 pub struct Email;
 
-impl<B, Conn> Hook<B, Conn> for Email
-where
-    Conn: Connection<Backend = B>,
-    B: diesel::backend::Backend<RawValue = [u8]>,
-{
-    fn warned(&self, db: &Conn, data: Data) -> Result<(), Error> {
+impl Hook for Email {
+    fn warned(&self, db: &Db, data: Data) -> Result<(), Error> {
         let lease = data.lease();
 
         let user = User::by_id(db, lease.user_id())

@@ -8,7 +8,7 @@ use rocket_contrib::templates::Template;
 
 #[get("/show/<user_id>")]
 pub fn detail(user_id: i32, db: Db) -> Result<Option<Template>> {
-    let user = match User::by_id(&*db, user_id)? {
+    let user = match User::by_id(&(&db).into(), user_id)? {
         Some(x) => x,
         None => return Ok(None),
     };

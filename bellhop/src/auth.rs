@@ -1,3 +1,4 @@
+use crate::db::Db;
 use crate::models::user::User;
 
 use rocket::Rocket;
@@ -60,10 +61,10 @@ impl StdError for Error {
     }
 }
 
-pub trait Auth<B, Conn>: fmt::Debug {
+pub trait Auth: fmt::Debug {
     fn prelaunch(&self, rocket: Rocket) -> Rocket {
         rocket
     }
 
-    fn authenticate(&self, _conn: &Conn, _req: &Request) -> Result<Option<User>, Error>;
+    fn authenticate(&self, _conn: &Db, _req: &Request) -> Result<Option<User>, Error>;
 }

@@ -1,6 +1,7 @@
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
+use crate::db::Db;
 
 use std::error::Error as StdError;
 use std::fmt;
@@ -88,24 +89,24 @@ impl<'a> Data<'a> {
     }
 }
 
-pub trait Hook<B, Conn>: fmt::Debug {
+pub trait Hook: fmt::Debug {
     /// Called for each hook when a lease is created.
-    fn leased(&self, _conn: &Conn, _data: Data) -> Result<(), Error> {
+    fn leased(&self, _conn: &Db, _data: Data) -> Result<(), Error> {
         Ok(())
     }
 
     /// Called for each hook when a lease is returned before it expires.
-    fn returned(&self, _conn: &Conn, _data: Data) -> Result<(), Error> {
+    fn returned(&self, _conn: &Db, _data: Data) -> Result<(), Error> {
         Ok(())
     }
 
     /// Called for each hook after a lease has been deleted.
-    fn evicted(&self, _conn: &Conn, _data: Data) -> Result<(), Error> {
+    fn evicted(&self, _conn: &Db, _data: Data) -> Result<(), Error> {
         Ok(())
     }
 
     /// Called for each hook when the eviction notice should be sent.
-    fn warned(&self, _conn: &Conn, _data: Data) -> Result<(), Error> {
+    fn warned(&self, _conn: &Db, _data: Data) -> Result<(), Error> {
         Ok(())
     }
 }

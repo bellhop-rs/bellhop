@@ -1,7 +1,6 @@
 use bellhop::auth::*;
 use bellhop::models::user::User;
-
-use diesel::prelude::*;
+use bellhop::db::Db;
 
 use regex::Regex;
 
@@ -20,11 +19,7 @@ pub struct Header;
 
 const DEFAULT: &str = "(?P<email>.*)";
 
-impl<B, Conn> Auth<B, Conn> for Header
-where
-    Conn: Connection<Backend = B>,
-    B: diesel::backend::Backend<RawValue = [u8]>,
-{
+impl Auth for Header {
     fn prelaunch(&self, rocket: Rocket) -> Rocket {
         rocket.attach(AdHoc::on_attach("Auth Header Config", |rocket| {
             let name = rocket
@@ -51,7 +46,7 @@ where
         }))
     }
 
-    fn authenticate(&self, c: &Conn, req: &Request) -> Result<Option<User>, Error> {
+    fn authenticate(&self, c: &Db, req: &Request) -> Result<Option<User>, Error> {
         let auths = match req.guard::<State<AuthRegex>>() {
             Outcome::Success(x) => x,
             Outcome::Failure(_) => return Err(Error::with_msg("unable to get AuthRegex")),

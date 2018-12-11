@@ -1,10 +1,11 @@
+use crate::db::Db as PubDb;
 use crate::hooks::{Data, Hook};
 
 use diesel::prelude::*;
 
 #[derive(Debug, Default)]
 pub(crate) struct Hooks(
-    pub Vec<Box<Hook<<PgConnection as Connection>::Backend, PgConnection> + Sync + Send>>,
+    pub Vec<Box<Hook + Sync + Send>>,
 );
 
 impl Hooks {
@@ -12,7 +13,7 @@ impl Hooks {
         use crate::errors::*;
 
         for hook in self.0.iter() {
-            hook.returned(db, data.clone())
+            hook.returned(&PubDb::from(db), data.clone())
                 .chain_err(|| "error running hook")?;
         }
 
@@ -23,7 +24,7 @@ impl Hooks {
         use crate::errors::*;
 
         for hook in self.0.iter() {
-            hook.leased(db, data.clone())
+            hook.leased(&PubDb::from(db), data.clone())
                 .chain_err(|| "error running hook")?;
         }
 
@@ -34,7 +35,7 @@ impl Hooks {
         use crate::errors::*;
 
         for hook in self.0.iter() {
-            hook.evicted(db, data.clone())
+            hook.evicted(&PubDb::from(db), data.clone())
                 .chain_err(|| "error running hook")?;
         }
 
@@ -45,7 +46,7 @@ impl Hooks {
         use crate::errors::*;
 
         for hook in self.0.iter() {
-            hook.warned(db, data.clone())
+            hook.warned(&PubDb::from(db), data.clone())
                 .chain_err(|| "error running hook")?;
         }
 
