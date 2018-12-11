@@ -29,8 +29,6 @@ use crate::hooks::Hook;
 use crate::internal::hooks::Hooks;
 use crate::internal::auth::Auths;
 
-use diesel::prelude::*;
-
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 
@@ -43,7 +41,7 @@ pub struct Bellhop {
 impl Bellhop {
     pub fn hook<H>(mut self, hook: H) -> Self
     where
-        H: 'static + Send + Sync + Hook<<PgConnection as Connection>::Backend, PgConnection>,
+        H: 'static + Send + Sync + Hook,
     {
         self.hooks.0.push(Box::new(hook));
         self
@@ -51,7 +49,7 @@ impl Bellhop {
 
     pub fn auth<A>(mut self, auth: A) -> Self
     where
-        A: 'static + Send + Sync + Auth<<PgConnection as Connection>::Backend, PgConnection>,
+        A: 'static + Send + Sync + Auth,
     {
         self.auths.0.push(Box::new(auth));
         self

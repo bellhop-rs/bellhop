@@ -11,6 +11,7 @@ mod schema;
 use crate::models::{HookPoint, JenkinsHook};
 
 use bellhop::hooks::{Data, Error, ErrorKind, Hook};
+use bellhop::db::Db;
 
 use diesel::prelude::*;
 
@@ -20,16 +21,12 @@ use reqwest::Client;
 pub struct Jenkins;
 
 impl Jenkins {
-    fn run<B, Conn>(db: &Conn, data: Data, by_hook_at: HookPoint) -> Result<(), Error>
-    where
-        Conn: Connection<Backend = B>,
-        B: diesel::backend::Backend<RawValue = [u8]>,
-    {
+    fn run(db: &Db, data: Data, by_hook_at: HookPoint) -> Result<(), Error> {
         use crate::schema::jenkins_hooks::dsl::*;
 
         let hook: Option<JenkinsHook> = JenkinsHook::belonging_to(data.asset_type())
             .filter(hook_at.eq(by_hook_at as i16))
-            .get_result(db)
+            .get_result(db.raw())
             .optional()
             .map_err(Error::for_kind(ErrorKind::msg("database error")))?;
 
@@ -70,20 +67,16 @@ impl Jenkins {
     }
 }
 
-impl<B, Conn> Hook<B, Conn> for Jenkins
-where
-    Conn: Connection<Backend = B>,
-    B: diesel::backend::Backend<RawValue = [u8]>,
-{
-    fn leased(&self, db: &Conn, data: Data) -> Result<(), Error> {
+impl Hook for Jenkins {
+    fn leased(&self, db: &Db, data: Data) -> Result<(), Error> {
         Self::run(db, data, HookPoint::Leased)
     }
 
-    fn returned(&self, db: &Conn, data: Data) -> Result<(), Error> {
+    fn returned(&self, db: &Db, data: Data) -> Result<(), Error> {
         Self::run(db, data, HookPoint::Returned)
     }
 
-    fn evicted(&self, db: &Conn, data: Data) -> Result<(), Error> {
+    fn evicted(&self, db: &Db, data: Data) -> Result<(), Error> {
         Self::run(db, data, HookPoint::Evicted)
     }
 }

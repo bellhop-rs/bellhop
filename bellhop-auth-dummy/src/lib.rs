@@ -7,8 +7,7 @@ mod views;
 
 use bellhop::auth::*;
 use bellhop::models::user::User;
-
-use diesel::prelude::*;
+use bellhop::db::Db;
 
 use rocket::Rocket;
 use rocket::request::Request;
@@ -24,16 +23,12 @@ fn unauthorized() -> Redirect {
 #[derive(Debug)]
 pub struct Dummy;
 
-impl<B, Conn> Auth<B, Conn> for Dummy
-where
-    Conn: Connection<Backend = B>,
-    B: diesel::backend::Backend<RawValue = [u8]>,
-{
+impl Auth for Dummy {
     fn prelaunch(&self, rocket: Rocket) -> Rocket {
         rocket.register(catchers![unauthorized])
     }
 
-    fn authenticate(&self, c: &Conn, req: &Request) -> Result<Option<User>, Error> {
+    fn authenticate(&self, c: &Db, req: &Request) -> Result<Option<User>, Error> {
         let mut cookies = req.cookies();
 
         let user_id_cookie = match cookies.get_private(LOGIN_COOKIE) {

@@ -12,4 +12,3 @@ license = "Apache-2.0"
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.2.0" }
 rocket = "0.4.0"
-diesel = { version = "1.0.0", default-features = false }

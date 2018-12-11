@@ -35,7 +35,7 @@ pub(crate) fn submit(
     mut cookies: Cookies,
     db: Db,
 ) -> Result<StdResult<Redirect, Template>> {
-    let user = match User::by_email(&*db, user.email())? {
+    let user = match User::by_email(&(&db).into(), user.email())? {
         Some(x) => x,
         None => return Ok(StdResult::Err(Template::render("login/home", ""))),
     };
