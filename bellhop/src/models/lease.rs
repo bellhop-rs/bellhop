@@ -26,7 +26,7 @@ pub struct Lease {
 }
 
 impl Lease {
-    pub fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<Lease>> {
+    pub(crate) fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<Lease>> {
         use self::leases::dsl::*;
 
         let mut lease = leases
@@ -59,7 +59,7 @@ impl Lease {
     }
 }
 
-#[derive(Debug, Deserialize, Insertable)]
+#[derive(Debug, Deserialize, Insertable, TypedBuilder)]
 #[table_name = "leases"]
 pub struct CreateLease {
     user_id: i32,
@@ -69,14 +69,6 @@ pub struct CreateLease {
 }
 
 impl CreateLease {
-    pub fn new(user_id: i32, end_time: DateTime<Utc>) -> Self {
-        Self {
-            user_id,
-            start_time: Utc::now(),
-            end_time: end_time,
-        }
-    }
-
     pub fn user_id(&self) -> i32 {
         self.user_id
     }
@@ -119,7 +111,7 @@ impl<'v> FromFormValue<'v> for DateField {
 }
 
 #[derive(Debug, FromForm)]
-pub struct CreateLeaseForm {
+pub(crate) struct CreateLeaseForm {
     end_time: DateField,
 }
 
@@ -129,6 +121,10 @@ impl CreateLeaseForm {
     }
 
     pub fn into_create_lease(self, user_id: i32) -> CreateLease {
-        CreateLease::new(user_id, self.end_time.0)
+        CreateLease::builder()
+            .user_id(user_id)
+            .start_time(Utc::now())
+            .end_time(self.end_time.0)
+            .build()
     }
 }
