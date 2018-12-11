@@ -1,14 +1,21 @@
 use crate::models::asset_type::AssetType;
 use crate::schema::asset_types;
+use crate::errors::*;
 
 use rocket_contrib::databases::diesel;
 
 use diesel::prelude::*;
 
-use crate::errors::*;
+use std::fmt;
 
 #[database("bellhop")]
 pub struct Db(diesel::PgConnection);
+
+impl fmt::Debug for Db {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Db(PgConnection)")
+    }
+}
 
 pub fn get_all_types(c: &PgConnection) -> Result<Vec<AssetType>> {
     use self::asset_types::dsl::*;

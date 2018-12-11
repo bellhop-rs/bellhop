@@ -1,9 +1,6 @@
-use crate::errors::*;
 use crate::schema::tag_types;
 
 use super::asset_type::AssetType;
-
-use diesel::prelude::*;
 
 #[derive(Debug, Associations, Serialize, Queryable, Identifiable, PartialEq, Eq)]
 #[belongs_to(AssetType)]
@@ -17,18 +14,6 @@ pub struct TagType {
 }
 
 impl TagType {
-    pub fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<TagType>> {
-        use self::tag_types::dsl::*;
-
-        let tag_type: Option<TagType> = tag_types
-            .filter(id.eq(by_id))
-            .get_result(c)
-            .optional()
-            .chain_err(|| "failed to find tag_type by id")?;
-
-        Ok(tag_type)
-    }
-
     pub fn detail_only(&self) -> bool {
         self.detail_only
     }

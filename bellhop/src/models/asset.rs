@@ -19,7 +19,7 @@ pub struct Asset {
 }
 
 impl Asset {
-    pub fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<Asset>> {
+    pub(crate) fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<Asset>> {
         use self::assets::dsl::*;
 
         let mut asset = assets
@@ -31,7 +31,7 @@ impl Asset {
         Ok(asset.pop())
     }
 
-    pub fn fetch_lease_owner(&self, c: &PgConnection) -> Result<Option<(Lease, User)>> {
+    pub(crate) fn fetch_lease_owner(&self, c: &PgConnection) -> Result<Option<(Lease, User)>> {
         use crate::schema::leases::dsl::*;
         use crate::schema::users::dsl as u;
 

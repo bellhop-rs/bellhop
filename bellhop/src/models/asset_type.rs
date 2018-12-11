@@ -1,8 +1,6 @@
 use crate::errors::*;
 use crate::schema::asset_types;
 
-use super::tag_type::TagType;
-
 use diesel::prelude::*;
 
 #[derive(Debug, Serialize, Queryable, Identifiable, PartialEq, Eq)]
@@ -12,7 +10,7 @@ pub struct AssetType {
 }
 
 impl AssetType {
-    pub fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<AssetType>> {
+    pub(crate) fn by_id(c: &PgConnection, by_id: i32) -> Result<Option<AssetType>> {
         use self::asset_types::dsl::*;
 
         let mut asset_type = asset_types
@@ -30,14 +28,5 @@ impl AssetType {
 
     pub fn name(&self) -> &str {
         &self.name
-    }
-
-    pub fn fetch_tag_types(&self, c: &PgConnection) -> Result<Vec<TagType>> {
-        use crate::schema::tag_types::dsl::*;
-
-        tag_types
-            .filter(asset_type_id.eq(self.id))
-            .load(c)
-            .chain_err(|| "failed to fetch tag types")
     }
 }
