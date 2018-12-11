@@ -1,4 +1,4 @@
-use crate::db::Db;
+use crate::internal::db::Db;
 use crate::errors::*;
 use crate::hooks::Data as HookData;
 use crate::internal::hooks::Hooks;

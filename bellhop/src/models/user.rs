@@ -1,4 +1,4 @@
-use crate::db::Db;
+use crate::internal::db::Db;
 use crate::errors::*;
 use crate::schema::users;
 use crate::internal::auth::Auths;

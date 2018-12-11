@@ -1,4 +1,4 @@
-use crate::db::{get_all_types, Db};
+use crate::internal::db::{get_all_types, Db};
 use crate::errors::*;
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;

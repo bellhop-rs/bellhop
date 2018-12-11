@@ -15,7 +15,7 @@ extern crate serde_derive;
 extern crate typed_builder;
 
 pub mod auth;
-mod db;
+pub mod db;
 mod errors;
 pub mod hooks;
 mod internal;
@@ -82,7 +82,7 @@ impl Bellhop {
             )
             .mount("/", routes![views::endpoints::sheriff])
             .attach(Template::fairing())
-            .attach(db::Db::fairing());
+            .attach(internal::db::Db::fairing());
 
         for auth in self.auths.0.iter() {
             r = auth.prelaunch(r);

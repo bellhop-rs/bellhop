@@ -1,4 +1,4 @@
-use crate::db::Db;
+use crate::internal::db::Db;
 use crate::errors::*;
 use crate::models::user::{CreateUser, User};
 
