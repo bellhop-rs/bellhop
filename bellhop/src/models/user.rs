@@ -85,12 +85,18 @@ impl<'a, 'r> FromRequest<'a, 'r> for User {
 
 #[derive(Debug, Deserialize, Insertable, TypedBuilder, FromForm)]
 #[table_name = "users"]
-pub(crate) struct CreateUser {
+pub struct CreateUser {
     email: String,
 }
 
 impl CreateUser {
     pub fn email(&self) -> &str {
         &self.email
+    }
+
+    pub fn insert<B, Conn>(&self, c: &PubDb) -> Result<User> {
+        use self::users::dsl::*;
+
+        diesel::insert_into(users).values(self).get_result(c.db()).chain_err(|| "unable to insert user")
     }
 }

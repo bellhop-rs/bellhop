@@ -12,3 +12,10 @@ license = "Apache-2.0"
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.2.0" }
 rocket = "0.4.0"
+serde = "1.0.80"
+serde_derive = "1.0.80"
+
+[dependencies.rocket_contrib]
+version = "0.4.0"
+default-features = false
+features = ["handlebars_templates"]

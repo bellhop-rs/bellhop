@@ -16,7 +16,7 @@ extern crate typed_builder;
 
 pub mod auth;
 pub mod db;
-mod errors;
+pub mod errors;
 pub mod hooks;
 mod internal;
 pub mod models;
@@ -59,8 +59,6 @@ impl Bellhop {
         let mut r = rocket::ignite()
             .mount("/", routes![views::types::have_access])
             .mount("/", routes![views::favicon::favicon])
-            .mount("/login", routes![views::login::home, views::login::submit])
-            .mount("/logout", routes![views::login::logout])
             .mount(
                 "/types",
                 routes![views::types::request_access, views::types::detail],
