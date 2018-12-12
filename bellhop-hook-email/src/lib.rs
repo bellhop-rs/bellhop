@@ -3,8 +3,7 @@ use bellhop::models::user::User;
 
 use diesel::prelude::*;
 
-use lettre::smtp::{ClientSecurity, SmtpTransportBuilder};
-use lettre::EmailTransport;
+use lettre::{ClientSecurity, SmtpClient, Transport};
 
 use lettre_email::EmailBuilder;
 
@@ -42,11 +41,11 @@ where
             .unwrap();
 
         // Open a local connection on port 25
-        let mut mailer = SmtpTransportBuilder::new("smtp.example.com:25", ClientSecurity::None)
+        let mut mailer = SmtpClient::new("smtp.example.com:25", ClientSecurity::None)
             .unwrap()
-            .build();
+            .transport();
         // Send the email
-        let result = mailer.send(&email);
+        let result = mailer.send(email.into());
 
         match result {
             Ok(_) => {}
