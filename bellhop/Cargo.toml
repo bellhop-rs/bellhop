@@ -26,4 +26,4 @@ typed-builder = "0.1.1"
 [dependencies.rocket_contrib]
 version = "0.4.0"
 default-features = false
-features = ["handlebars_templates", "serve", "diesel_postgres_pool"]
+features = ["handlebars_templates", "serve", "diesel_postgres_pool", "json"]
