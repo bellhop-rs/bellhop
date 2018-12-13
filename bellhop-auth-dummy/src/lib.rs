@@ -8,12 +8,12 @@ extern crate serde_derive;
 mod views;
 
 use bellhop::auth::*;
-use bellhop::models::user::User;
 use bellhop::db::Db;
+use bellhop::models::user::User;
 
-use rocket::Rocket;
 use rocket::request::Request;
 use rocket::response::Redirect;
+use rocket::Rocket;
 
 const LOGIN_COOKIE: &str = "user_login";
 
@@ -27,9 +27,10 @@ pub struct Dummy;
 
 impl Auth for Dummy {
     fn prelaunch(&self, rocket: Rocket) -> Rocket {
-        rocket
-            .register(catchers![unauthorized])
-            .mount("/auth/dummy/", routes![views::login_get, views::logout, views::login_post])
+        rocket.register(catchers![unauthorized]).mount(
+            "/auth/dummy/",
+            routes![views::login_get, views::logout, views::login_post],
+        )
     }
 
     fn authenticate(&self, c: &Db, req: &Request) -> Result<Option<User>, Error> {
@@ -51,8 +52,9 @@ impl Auth for Dummy {
             Err(_) => return Ok(None),
         };
 
-        let user = User::by_id(c, user_id)
-            .map_err(Error::for_kind(ErrorKind::msg("unable to get user from db")))?;
+        let user = User::by_id(c, user_id).map_err(Error::for_kind(ErrorKind::msg(
+            "unable to get user from db",
+        )))?;
 
         match user {
             Some(x) => Ok(Some(x)),

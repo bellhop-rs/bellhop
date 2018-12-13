@@ -1,11 +1,11 @@
 use crate::db::Db;
 use crate::models::user::User;
 
-use rocket::Rocket;
 use rocket::request::Request;
+use rocket::Rocket;
 
-use std::fmt;
 use std::error::Error as StdError;
+use std::fmt;
 
 #[derive(Debug)]
 pub enum ErrorKind {

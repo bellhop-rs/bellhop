@@ -1,10 +1,10 @@
 use crate::internal::db::Db as InternalDb;
 
-use diesel::prelude::*;
 use diesel::backend::Backend;
+use diesel::prelude::*;
 
+use rocket::request::{self, FromRequest, Request};
 use rocket::Outcome;
-use rocket::request::{self, Request, FromRequest};
 
 use std::fmt;
 use std::ops::Deref;
@@ -76,7 +76,7 @@ impl<'a> Db<'a> {
         &self.0
     }
 
-    pub fn raw(&self) -> &impl Connection<Backend=impl Backend<RawValue = [u8]>> {
+    pub fn raw(&self) -> &impl Connection<Backend = impl Backend<RawValue = [u8]>> {
         &*self.0
     }
 }

@@ -1,5 +1,5 @@
-use crate::internal::db::Db;
 use crate::errors::*;
+use crate::internal::db::Db;
 use crate::internal::hooks::Hooks;
 use crate::sheriff;
 

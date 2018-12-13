@@ -1,6 +1,6 @@
+use crate::errors::*;
 use crate::models::asset_type::AssetType;
 use crate::schema::asset_types;
-use crate::errors::*;
 
 use rocket_contrib::databases::diesel;
 

@@ -1,6 +1,6 @@
-use crate::internal::db::Db;
 use crate::errors::*;
 use crate::hooks::Data as HookData;
+use crate::internal::db::Db;
 use crate::internal::hooks::Hooks;
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;

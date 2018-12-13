@@ -10,8 +10,8 @@ mod schema;
 
 use crate::models::{HookPoint, JenkinsHook};
 
-use bellhop::hooks::{Data, Error, ErrorKind, Hook};
 use bellhop::db::Db;
+use bellhop::hooks::{Data, Error, ErrorKind, Hook};
 
 use diesel::prelude::*;
 

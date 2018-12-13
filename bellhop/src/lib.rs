@@ -26,8 +26,8 @@ mod views;
 
 use crate::auth::Auth;
 use crate::hooks::Hook;
-use crate::internal::hooks::Hooks;
 use crate::internal::auth::Auths;
+use crate::internal::hooks::Hooks;
 
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
@@ -84,8 +84,6 @@ impl Bellhop {
             r = auth.prelaunch(r);
         }
 
-        r.manage(self.hooks)
-            .manage(self.auths)
-            .launch();
+        r.manage(self.hooks).manage(self.auths).launch();
     }
 }

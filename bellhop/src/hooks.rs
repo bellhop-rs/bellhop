@@ -1,7 +1,7 @@
+use crate::db::Db;
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
-use crate::db::Db;
 
 use std::error::Error as StdError;
 use std::fmt;

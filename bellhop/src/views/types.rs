@@ -1,5 +1,5 @@
-use crate::internal::db::{get_all_types, Db};
 use crate::errors::*;
+use crate::internal::db::{get_all_types, Db};
 use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
