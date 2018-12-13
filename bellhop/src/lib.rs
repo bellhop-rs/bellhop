@@ -57,6 +57,15 @@ impl Bellhop {
 
     pub fn start(self) {
         let mut r = rocket::ignite()
+            .mount(
+                "/api/v0/assets/",
+                routes![
+                    views::api::v0::assets::list,
+                    views::api::v0::assets::detail,
+                    views::api::v0::assets::tags,
+                    views::api::v0::assets::lease,
+                ],
+            )
             .mount("/", routes![views::types::have_access])
             .mount("/", routes![views::favicon::favicon])
             .mount(
