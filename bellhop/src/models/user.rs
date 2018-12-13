@@ -93,7 +93,7 @@ impl CreateUser {
         &self.email
     }
 
-    pub fn insert<B, Conn>(&self, c: &PubDb) -> Result<User> {
+    pub fn insert(&self, c: &PubDb) -> Result<User> {
         use self::users::dsl::*;
 
         diesel::insert_into(users)

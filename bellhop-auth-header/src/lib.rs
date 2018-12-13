@@ -1,6 +1,6 @@
 use bellhop::auth::*;
 use bellhop::db::Db;
-use bellhop::models::user::User;
+use bellhop::models::user::{CreateUser, User};
 
 use regex::Regex;
 
@@ -18,6 +18,18 @@ struct AuthRegex {
 pub struct Header;
 
 const DEFAULT: &str = "(?P<email>.*)";
+
+impl Header {
+    fn register(&self, c: &Db, email: &str) -> Result<User, Error> {
+        CreateUser::builder()
+            .email(email)
+            .build()
+            .insert(c)
+            .map_err(Error::for_kind(ErrorKind::msg(
+                "unable to insert new user from header",
+            )))
+    }
+}
 
 impl Auth for Header {
     fn prelaunch(&self, rocket: Rocket) -> Rocket {
@@ -77,7 +89,7 @@ impl Auth for Header {
         )))?;
 
         match user {
-            None => unimplemented!(),
+            None => self.register(c, email).map(Some),
             x => Ok(x),
         }
     }
