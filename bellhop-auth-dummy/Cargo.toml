@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-auth-dummy"
-version = "0.1.0"
+version = "0.2.0-dev"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
@@ -10,7 +10,7 @@ edition = "2018"
 license = "Apache-2.0"
 
 [dependencies]
-bellhop = { path = "../bellhop", version = "0.2.0" }
+bellhop = { path = "../bellhop", version = "0.2.0-dev" }
 rocket = "0.4.0"
 serde = "1.0.80"
 serde_derive = "1.0.80"
