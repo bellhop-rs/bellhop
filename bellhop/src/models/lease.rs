@@ -21,8 +21,8 @@ pub struct Lease {
     user_id: i32,
 
     last_notified: Option<DateTime<Utc>>,
-    end_time: DateTime<Utc>,
     start_time: DateTime<Utc>,
+    end_time: DateTime<Utc>,
 }
 
 impl Lease {
