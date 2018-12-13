@@ -1,6 +1,6 @@
+use bellhop::db::Db;
 use bellhop::hooks::{Data, Error, ErrorKind, Hook};
 use bellhop::models::user::User;
-use bellhop::db::Db;
 
 use lettre::{ClientSecurity, SmtpClient, Transport};
 

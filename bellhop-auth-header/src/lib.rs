@@ -1,12 +1,12 @@
 use bellhop::auth::*;
-use bellhop::models::user::User;
 use bellhop::db::Db;
+use bellhop::models::user::User;
 
 use regex::Regex;
 
-use rocket::{Outcome, Rocket};
 use rocket::fairing::AdHoc;
 use rocket::request::{Request, State};
+use rocket::{Outcome, Rocket};
 
 #[derive(Debug)]
 struct AuthRegex {
@@ -72,8 +72,9 @@ impl Auth for Header {
             None => return Ok(None),
         };
 
-        let user = User::by_email(c, email)
-            .map_err(Error::for_kind(ErrorKind::msg("unable to get user for authentication")))?;
+        let user = User::by_email(c, email).map_err(Error::for_kind(ErrorKind::msg(
+            "unable to get user for authentication",
+        )))?;
 
         match user {
             None => unimplemented!(),

@@ -1,13 +1,13 @@
 use crate::db::Db as PubDb;
-use crate::internal::db::Db;
 use crate::errors::*;
-use crate::schema::users;
 use crate::internal::auth::Auths;
+use crate::internal::db::Db;
+use crate::schema::users;
 
 use diesel::prelude::*;
 
-use rocket::request::{self, Request, FromRequest, State};
 use rocket::http::Status;
+use rocket::request::{self, FromRequest, Request, State};
 use rocket::Outcome;
 
 #[derive(Debug, Serialize, Queryable, Identifiable, PartialEq)]
@@ -29,8 +29,7 @@ impl User {
         Ok(user.pop())
     }
 
-    pub fn by_id(c: &PubDb, by_id: i32) -> Result<Option<User>>
-    {
+    pub fn by_id(c: &PubDb, by_id: i32) -> Result<Option<User>> {
         use self::users::dsl::*;
 
         let mut user = users
@@ -97,6 +96,9 @@ impl CreateUser {
     pub fn insert<B, Conn>(&self, c: &PubDb) -> Result<User> {
         use self::users::dsl::*;
 
-        diesel::insert_into(users).values(self).get_result(c.db()).chain_err(|| "unable to insert user")
+        diesel::insert_into(users)
+            .values(self)
+            .get_result(c.db())
+            .chain_err(|| "unable to insert user")
     }
 }
