@@ -1,0 +1,4 @@
+ignore = [
+    "bellhop/src/schema.rs",
+    "bellhop-hook-jenkins/src/schema.rs",
+]
