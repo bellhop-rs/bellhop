@@ -1,0 +1,3 @@
+ALTER TABLE users ALTER id DROP DEFAULT;
+
+DROP SEQUENCE users_id_seq;
