@@ -1,3 +1,38 @@
+//! An implementation of [`bellhop::auth::Auth`] that authenticates a user based
+//! on a header.
+//!
+//! ## Routes
+//!
+//! Provides no routes.
+//!
+//! ## Catchers
+//!
+//! Provides no catchers.
+//!
+//! ## Configuration
+//!
+//! There are two optional configuration options that can be specified in
+//! `Rocket.toml`:
+//!  - `auth_header`: The name of the header to pull the email address from
+//!    (Default: `X-Bellhop-Email`.)
+//!  - `auth_header_email_pattern': A regular expression with a named capture
+//!    group for the email address (Default: `(?P<email>.*)`)
+//!
+//! ## Example
+//!
+//! ```no_run
+//! use bellhop::Bellhop;
+//! use bellhop_auth_header::Header;
+//!
+//! fn main() {
+//!     Bellhop::default()
+//!         .auth(Header)
+//!         .start()
+//! }
+//! ```
+
+#![deny(missing_docs)]
+
 use bellhop::auth::*;
 use bellhop::db::Db;
 use bellhop::models::user::{CreateUser, User};
@@ -14,6 +49,10 @@ struct AuthRegex {
     re: Regex,
 }
 
+/// An implementation of [`bellhop::auth::Auth`] that authenticates based on a
+/// header.
+///
+/// See the crate documentation for more details.
 #[derive(Debug)]
 pub struct Header;
 
