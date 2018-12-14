@@ -1,3 +1,33 @@
+//! An implementation of [`bellhop::auth::Auth`] that authenticates a user based
+//! on their email address (and *only* their email address.)
+//!
+//! Uses HTTP cookies to store the logged in user.
+//!
+//! ## Routes
+//!
+//! Provides a couple routes:
+//!  - `/auth/dummy/login`: Handles logging in.
+//!  - `/auth/dummy/logout`: Deletes the stored cookie.
+//!
+//! ## Catchers
+//!
+//! Provides one error catcher:
+//!  - `401 Unauthorized`: Redirects to `/auth/dummy/login`.
+//!
+//! ## Example
+//!
+//! ```no_run
+//! use bellhop::Bellhop;
+//! use bellhop_auth_dummy::Dummy;
+//!
+//! fn main() {
+//!     Bellhop::default()
+//!         .auth(Dummy)
+//!         .start()
+//! }
+//! ```
+
+#![deny(missing_docs)]
 #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use]
@@ -22,6 +52,9 @@ fn unauthorized() -> Redirect {
     Redirect::to("/auth/dummy/login")
 }
 
+/// An implementation of [`bellhop::auth::Auth`].
+///
+/// See the crate documentation for more information.
 #[derive(Debug)]
 pub struct Dummy;
 
