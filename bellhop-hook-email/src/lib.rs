@@ -1,3 +1,33 @@
+//! An implementation of [`bellhop::hooks::Hook`] that sends an email warning
+//! when leases are about to expire.
+//!
+//! ## Routes
+//!
+//! Provides no routes.
+//!
+//! ## Catchers
+//!
+//! Provides no catchers.
+//!
+//! ## Configuration
+//!
+//! None yet :(
+//!
+//! ## Example
+//!
+//! ```no_run
+//! use bellhop::Bellhop;
+//! use bellhop_hook_email::Email;
+//!
+//! fn main() {
+//!     Bellhop::default()
+//!         .hook(Email)
+//!         .start()
+//! }
+//! ```
+
+#![deny(missing_docs)]
+
 use bellhop::db::Db;
 use bellhop::hooks::{Data, Error, ErrorKind, Hook};
 use bellhop::models::user::User;
@@ -6,6 +36,9 @@ use lettre::{ClientSecurity, SmtpClient, Transport};
 
 use lettre_email::EmailBuilder;
 
+/// Sends email when leases are about to expire.
+///
+/// See the crate documentation for more information.
 #[derive(Debug)]
 pub struct Email;
 
