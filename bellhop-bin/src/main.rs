@@ -4,6 +4,8 @@
 //! While you can run this without customization, it probably won't be what you
 //! want.
 
+#![deny(missing_docs)]
+
 use bellhop::Bellhop;
 
 use bellhop_auth_dummy::Dummy;
