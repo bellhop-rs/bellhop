@@ -1,3 +1,5 @@
+//! General database related types and functions.
+
 use crate::internal::db::Db as InternalDb;
 
 use diesel::backend::Backend;
@@ -36,8 +38,9 @@ impl<'a> Deref for Rv<'a> {
 
 /// Opaque wrapper around a database connection.
 ///
-/// Unlike [`internal::db::Db`], this doesn't implement `Deref` and therefore
-/// doesn't leak the type of database connection.
+/// Useful for model functions like [`models::user::User::by_email`].
+// Unlike [`internal::db::Db`], this doesn't implement `Deref` and therefore
+// doesn't leak the type of database connection.
 #[derive(Debug)]
 pub struct Db<'a>(Rv<'a>);
 
@@ -76,6 +79,10 @@ impl<'a> Db<'a> {
         &self.0
     }
 
+    /// Return a reference to the underlying database type.
+    ///
+    /// You'll need this function if you want to create custom `diesel` queries
+    /// that aren't wrapped by functions on the model structs.
     pub fn raw(&self) -> &impl Connection<Backend = impl Backend<RawValue = [u8]>> {
         &*self.0
     }

@@ -1,3 +1,4 @@
+//! A `Lease` is a duration of time that a `User` owns an `Asset`.
 use crate::errors::*;
 use crate::schema::leases;
 
@@ -14,6 +15,7 @@ use std::ops::{Deref, DerefMut};
 use std::result::Result as StdResult;
 use std::str::FromStr;
 
+/// A `Lease` is a duration of time that a `User` owns an `Asset`.
 #[derive(Debug, Associations, Serialize, Queryable, Identifiable, PartialEq, Eq)]
 #[belongs_to(User)]
 pub struct Lease {
@@ -38,27 +40,49 @@ impl Lease {
         Ok(lease.pop())
     }
 
+    /// The primary key of this `Lease`.
     pub fn id(&self) -> i32 {
         self.id
     }
 
+    /// The primary key of this `Lease`'s owner.
     pub fn user_id(&self) -> i32 {
         self.user_id
     }
 
+    /// When the last sheriff notification was sent for this `Lease`.
     pub fn last_notified(&self) -> Option<DateTime<Utc>> {
         self.last_notified
     }
 
+    /// When this `Lease` was created.
     pub fn start_time(&self) -> DateTime<Utc> {
         self.start_time
     }
 
+    /// When this `Lease` is expected to end.
     pub fn end_time(&self) -> DateTime<Utc> {
         self.end_time
     }
 }
 
+/// Insertable companion to [`Lease`].
+///
+/// ## Example
+///
+/// ```
+/// use bellhop::models::lease::CreateLease;
+///
+/// use chrono::prelude::*;
+///
+/// let lease = CreateLease::builder()
+///     .user_id(1)
+///     .start_time(Utc::now())
+///     .end_time(Utc::now())
+///     .build();
+///
+/// // TODO: Demonstrate saving a Lease, when that's implemented.
+/// ```
 #[derive(Debug, Deserialize, Insertable, TypedBuilder)]
 #[table_name = "leases"]
 pub struct CreateLease {
@@ -69,14 +93,17 @@ pub struct CreateLease {
 }
 
 impl CreateLease {
+    /// The primary key for the new `Lease`'s owner.
     pub fn user_id(&self) -> i32 {
         self.user_id
     }
 
+    /// When the new `Lease` will come into effect.
     pub fn start_time(&self) -> DateTime<Utc> {
         self.start_time
     }
 
+    /// When the new `Lease` will end.
     pub fn end_time(&self) -> DateTime<Utc> {
         self.end_time
     }

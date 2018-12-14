@@ -1,3 +1,8 @@
+//! The most basic user database model you could ever hope to find.
+//!
+//! Most of the functionality you'd expect from a user comes from plugin crates
+//! like `bellhop-auth-header` or `bellhop-auth-dummy`.
+
 use crate::db::Db as PubDb;
 use crate::errors::*;
 use crate::internal::auth::Auths;
@@ -10,6 +15,7 @@ use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request, State};
 use rocket::Outcome;
 
+/// A `User` is Bellhop's representation of a person or API client.
 #[derive(Debug, Serialize, Queryable, Identifiable, PartialEq)]
 pub struct User {
     id: i32,
@@ -17,6 +23,7 @@ pub struct User {
 }
 
 impl User {
+    /// Find a `User` by its email address.
     pub fn by_email(c: &PubDb, by_email: &str) -> Result<Option<User>> {
         use self::users::dsl::*;
 
@@ -29,6 +36,7 @@ impl User {
         Ok(user.pop())
     }
 
+    /// Find a `User` by its primary key.
     pub fn by_id(c: &PubDb, by_id: i32) -> Result<Option<User>> {
         use self::users::dsl::*;
 
@@ -41,10 +49,12 @@ impl User {
         Ok(user.pop())
     }
 
+    /// The primary key of this `User`.
     pub fn id(&self) -> i32 {
         self.id
     }
 
+    /// The email address of this `User`.
     pub fn email(&self) -> &str {
         &self.email
     }
@@ -82,6 +92,24 @@ impl<'a, 'r> FromRequest<'a, 'r> for User {
     }
 }
 
+/// The insertable companion of `User`.
+///
+/// ## Example
+///
+/// ```no_run
+/// use bellhop::db::Db;
+/// use bellhop::models::user::CreateUser;
+///
+/// // The `db` argument could come from implementing `bellhop::hooks::Hook`, or
+/// // as a Rocket request guard.
+/// fn some_function(db: &Db) {
+///     let new_user = CreateUser::builder()
+///         .email("ew@example.com")
+///         .build()
+///         .insert(db)
+///         .unwrap();
+/// }
+/// ```
 #[derive(Debug, Deserialize, Insertable, TypedBuilder, FromForm)]
 #[table_name = "users"]
 pub struct CreateUser {
@@ -89,10 +117,14 @@ pub struct CreateUser {
 }
 
 impl CreateUser {
+    /// The email address of the `User` to be created.
     pub fn email(&self) -> &str {
         &self.email
     }
 
+    /// Insert the `User` into the database and return it.
+    ///
+    /// See the struct documentation for an example.
     pub fn insert(&self, c: &PubDb) -> Result<User> {
         use self::users::dsl::*;
 

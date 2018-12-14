@@ -1,4 +1,12 @@
+//! Bellhop is a web application for sharing and reserving assets (like lab
+//! computers, test credentials, etc.) among members of a team.
+//!
+//! There are some plugins for supporting authentication and for integration
+//! with other services. See the Bellhop website https://bellhop.rs for more
+//! documentation and usage examples.
+
 #![allow(proc_macro_derive_resolution_fallback)] // Should be fixed in the next major Diesel version
+#![deny(missing_docs)]
 #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use]
@@ -32,6 +40,23 @@ use crate::internal::hooks::Hooks;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
 
+/// Configuration for a Bellhop server.
+///
+/// ## Example
+///
+/// ```no_run
+/// use bellhop::Bellhop;
+///
+/// fn main() {
+///     Bellhop::default()
+///         .start() // Start running the server.
+/// }
+/// ```
+///
+/// ## See Also
+///
+/// The `bellhop-bin` crate has a more fully featured example that includes
+/// attaching plugins.
 #[derive(Debug, Default)]
 pub struct Bellhop {
     hooks: Hooks,
@@ -39,6 +64,10 @@ pub struct Bellhop {
 }
 
 impl Bellhop {
+    /// Add a hook plugin.
+    ///
+    /// `Hook` plugins provide additional functionality when the status of an
+    /// [`models::asset::Asset`] changes.
     pub fn hook<H>(mut self, hook: H) -> Self
     where
         H: 'static + Send + Sync + Hook,
@@ -47,6 +76,12 @@ impl Bellhop {
         self
     }
 
+    /// Add an authentication plugin.
+    ///
+    /// The order of `auth` calls is significant. All added `Auth` instances
+    /// are tried in the order that they were added. The first `Auth` to return
+    /// a [`models::user::User`] is used to authenticate. If any `Auth` returns
+    /// a failure, authentication is aborted.
     pub fn auth<A>(mut self, auth: A) -> Self
     where
         A: 'static + Send + Sync + Auth,
@@ -55,6 +90,7 @@ impl Bellhop {
         self
     }
 
+    /// Launch the Bellhop server.
     pub fn start(self) {
         let mut r = rocket::ignite()
             .mount(
