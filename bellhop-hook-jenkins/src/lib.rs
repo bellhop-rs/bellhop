@@ -1,3 +1,32 @@
+//! An implementation of [`bellhop::hooks::Hook`] that starts a Jenkins job
+//! when leases are created or released, or when they're about to expire.
+//!
+//! ## Routes
+//!
+//! Provides no routes.
+//!
+//! ## Catchers
+//!
+//! Provides no catchers.
+//!
+//! ## Configuration
+//!
+//! None yet :(
+//!
+//! ## Example
+//!
+//! ```no_run
+//! use bellhop::Bellhop;
+//! use bellhop_hook_jenkins::Jenkins;
+//!
+//! fn main() {
+//!     Bellhop::default()
+//!         .hook(Jenkins)
+//!         .start()
+//! }
+//! ```
+
+#![deny(missing_docs)]
 #![allow(proc_macro_derive_resolution_fallback)] // Should be fixed in the next major Diesel version
 
 #[macro_use]
@@ -17,6 +46,9 @@ use diesel::prelude::*;
 
 use reqwest::Client;
 
+/// A [`bellhop::hooks::Hook`] implementation that triggers Jenkins jobs.
+///
+/// See the crate documentation for more details.
 #[derive(Debug)]
 pub struct Jenkins;
 
