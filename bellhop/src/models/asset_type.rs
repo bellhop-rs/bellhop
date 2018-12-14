@@ -1,8 +1,11 @@
+//! Every `Asset` belongs to a family of assets represented by `AssetType`.
+
 use crate::errors::*;
 use crate::schema::asset_types;
 
 use diesel::prelude::*;
 
+/// An `AssetType` is the family an `Asset` belongs to.
 #[derive(Debug, Serialize, Queryable, Identifiable, PartialEq, Eq)]
 pub struct AssetType {
     id: i32,
@@ -22,10 +25,12 @@ impl AssetType {
         Ok(asset_type.pop())
     }
 
+    /// The primary key of this `AssetType`.
     pub fn id(&self) -> i32 {
         self.id
     }
 
+    /// The human-readable name of this `AssetType`.
     pub fn name(&self) -> &str {
         &self.name
     }

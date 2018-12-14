@@ -1,3 +1,5 @@
+//! Rust representations of Bellhop's database models.
+
 pub mod asset;
 pub mod asset_type;
 pub mod lease;
