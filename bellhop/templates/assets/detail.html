@@ -1,9 +1,12 @@
-{{#*inline "base_header"}}
-    <a href="/types/{{asset_type.id}}">{{asset_type.name}}s</a> - {{asset.name}}
-{{/inline}}
+{% extends "assets/base.html" %}
 
-{{#*inline "content"}}
-    {{#if lease}}
+{% block base_header %}
+    <a href="/types/{{ asset_type.id() }}">{{ asset_type.name() }}s</a> - {{ asset.name() }}
+{% endblock %}
+
+{% block content %}
+{% match lease %}
+    {% when Some with (lease) %}
     <section>
         <h2>Active Lease</h2>
         <div>
@@ -11,20 +14,20 @@
                 <tbody>
                     <tr>
                         <th>Leased By</th>
-                        <td>{{lease.1.email}}</td>
+                        <td>{{ lease.1.email() }}</td>
                     </tr>
                     <tr>
                         <th>Until</th>
                         <td>
-                            <time datetime="{{lease.0.end_time}}">
-                                {{lease.0.end_time}}
+                            <time datetime="{{ lease.0.end_time() }}">
+                                {{ lease.0.end_time() }}
                             </time>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            {{#if user_owns_lease}}
-            <form id="release-{{asset.id}}-form" action="/assets/{{asset.id}}/lease" method="POST" class="release-form pure-form pure-form-aligned">
+            {% if user_owns_lease %}
+            <form id="release-{{ asset.id() }}-form" action="/assets/{{ asset.id() }}/lease" method="POST" class="release-form pure-form pure-form-aligned">
                 <input name="_method" value="DELETE" type="hidden">
                 <div class="pure-controls">
                     <button type="submit" class="pure-button button-release">
@@ -32,14 +35,14 @@
                     </button>
                 </div>
             </form>
-            {{/if}}
+            {% endif %}
         </div>
     </section>
-    {{else}}
+    {% when None %}
     <section>
         <h2>Reserve</h2>
         <div>
-            <form action="/assets/{{asset.id}}/lease" method="POST" class="reserve-form pure-form">
+            <form action="/assets/{{ asset.id() }}/lease" method="POST" class="reserve-form pure-form">
                 <fieldset>
                     <input name="_method" value="PUT" type="hidden">
                     <input placeholder="Until" type="text" name="end_time" autocomplete="off" required>
@@ -50,25 +53,28 @@
             </form>
         </div>
     </section>
-    {{/if}}
+    {% endmatch %}
     <section>
         <h2>Tags</h2>
         <div>
             <table class="pure-table">
                 <tbody>
-                {{#each tags}}
+                {% for tag in tags %}
                 <tr>
                     <th>
-                        {{this.0.name}}
+                        {{ tag.0.name() }}
                     </th>
                     <td>
-                        {{this.1.value}}
+                        {% match tag.1 %}
+                            {% when Some with (value) %}
+                                {{ value.value() }}
+                            {% when None %}
+                        {% endmatch %}
                     </td>
                 </tr>
                 </tbody>
-                {{/each}}
+                {% endfor %}
             </table>
         </div>
     </section>
-{{/inline}}
-{{~> types/base }}
+{% endblock %}

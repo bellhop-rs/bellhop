@@ -1,16 +1,18 @@
-{{#*inline "base_header"}}
-    <!-- TODO: Store plural name in database -->
-    {{asset_type.name}}s
-{{/inline}}
+{% extends "types/base.html" %}
 
-{{#*inline "content"}}
+{% block base_header %}
+    <!-- TODO: Store plural name in database -->
+    {{ asset_type.name() }}s
+{% endblock %}
+
+{% block content %}
 <table class="pure-table assets-table">
     <thead>
         <tr>
             <th>Asset</th>
-            {{#each tag_types}}
-                <th>{{this.name}}</th>
-            {{/each}}
+            {% for tt in tag_types %}
+                <th>{{ tt.name() }}</th>
+            {% endfor %}
             <th></th>
         </tr>
     </thead>
@@ -59,5 +61,5 @@
         {{/each}}
     </tbody>
 </table>
-{{/inline}}
+{% endblock %}
 {{~> types/base }}

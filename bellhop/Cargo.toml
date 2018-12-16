@@ -26,4 +26,16 @@ typed-builder = "0.1.1"
 [dependencies.rocket_contrib]
 version = "0.4.0"
 default-features = false
-features = ["handlebars_templates", "serve", "diesel_postgres_pool", "json"]
+features = ["serve", "diesel_postgres_pool", "json"]
+
+[dependencies.askama]
+# askama 0.8 is the first to support Rocket 0.4, so to git we go!
+version = "0.8.0"
+git = "https://github.com/djc/askama"
+features = ["with-rocket"]
+
+[build-dependencies.askama]
+# askama 0.8 is the first to support Rocket 0.4, so to git we go!
+version = "0.8.0"
+git = "https://github.com/djc/askama"
+features = ["with-rocket"]

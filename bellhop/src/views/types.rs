@@ -57,8 +57,19 @@ pub fn request_access(db: Db, user: User) -> Result<Template> {
     ))
 }
 
+#[derive(Template)]
+#[template(path = "types/detail.html")]
+pub struct Detail {
+    tag_types: Vec<TagType>,
+    asset_type: AssetType,
+    asset_tags: Vec<(Asset, bool, Vec<Option<Tag>>)>,
+    now: DateTime<Utc>,
+    user: User,
+}
+
+
 #[get("/<asset_type_id>")]
-pub fn detail(asset_type_id: i32, db: Db, user: User) -> Result<Option<Template>> {
+pub fn detail(asset_type_id: i32, db: Db, user: User) -> Result<Option<Detail>> {
     use crate::schema::leases::dsl as leases;
     use crate::schema::tag_types::dsl as tt;
 
@@ -112,23 +123,13 @@ pub fn detail(asset_type_id: i32, db: Db, user: User) -> Result<Option<Template>
         })
         .collect::<Vec<_>>();
 
-    #[derive(Serialize)]
-    struct Context {
-        tag_types: Vec<TagType>,
-        asset_type: AssetType,
-        asset_tags: Vec<(Asset, bool, Vec<Option<Tag>>)>,
-        now: DateTime<Utc>,
-        user: User,
-    }
-
-    Ok(Some(Template::render(
-        "types/detail",
-        Context {
+    Ok(Some(
+        Detail {
             tag_types,
             asset_type,
             asset_tags,
             now,
             user,
         },
-    )))
+    ))
 }

@@ -118,8 +118,19 @@ pub(crate) fn delete_lease(
     retval
 }
 
+#[derive(Template)]
+#[template(path = "assets/detail.html")]
+pub struct Detail {
+    asset: Asset,
+    asset_type: AssetType,
+    tags: Vec<(TagType, Option<Tag>)>,
+    lease: Option<(Lease, User)>,
+    user: User,
+    user_owns_lease: bool,
+}
+
 #[get("/<asset_id>")]
-pub fn detail(asset_id: i32, db: Db, user: User) -> Result<Option<Template>> {
+pub fn detail(asset_id: i32, db: Db, user: User) -> Result<Option<Detail>> {
     use crate::schema::tag_types::dsl as tt;
     use crate::schema::tags::dsl as t;
 
@@ -149,19 +160,8 @@ pub fn detail(asset_id: i32, db: Db, user: User) -> Result<Option<Template>> {
         .map(|(x, _)| x.user_id() == user.id())
         .unwrap_or(false);
 
-    #[derive(Serialize)]
-    struct Context {
-        asset: Asset,
-        asset_type: AssetType,
-        tags: Vec<(TagType, Option<Tag>)>,
-        lease: Option<(Lease, User)>,
-        user: User,
-        user_owns_lease: bool,
-    }
-
-    Ok(Some(Template::render(
-        "assets/detail",
-        Context {
+    Ok(Some(
+        Detail {
             lease,
             user_owns_lease,
             tags,
@@ -169,5 +169,5 @@ pub fn detail(asset_id: i32, db: Db, user: User) -> Result<Option<Template>> {
             asset_type,
             user,
         },
-    )))
+    ))
 }
