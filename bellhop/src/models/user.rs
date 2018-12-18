@@ -20,6 +20,7 @@ use rocket::Outcome;
 pub struct User {
     id: i32,
     email: String,
+    can_write: bool,
 }
 
 impl User {
@@ -57,6 +58,10 @@ impl User {
     /// The email address of this `User`.
     pub fn email(&self) -> &str {
         &self.email
+    }
+
+    pub(crate) fn can_write(&self) -> bool {
+        self.can_write
     }
 }
 

@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN can_write BOOLEAN NOT NULL DEFAULT false;
