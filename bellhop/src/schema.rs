@@ -46,6 +46,7 @@ table! {
     users (id) {
         id -> Int4,
         email -> Varchar,
+        can_write -> Bool,
     }
 }
 
