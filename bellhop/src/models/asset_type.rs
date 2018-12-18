@@ -1,5 +1,6 @@
 //! Every `Asset` belongs to a family of assets represented by `AssetType`.
 
+use crate::db::Db as PubDb;
 use crate::errors::*;
 use crate::schema::asset_types;
 
@@ -33,5 +34,48 @@ impl AssetType {
     /// The human-readable name of this `AssetType`.
     pub fn name(&self) -> &str {
         &self.name
+    }
+}
+
+/// The insertable companion of `AssetType`.
+///
+/// ## Example
+///
+/// ```no_run
+/// use bellhop::db::Db;
+/// use bellhop::models::asset_type::CreateAssetType;
+///
+/// // The `db` argument could come from implementing `bellhop::hooks::Hook`, or
+/// // as a Rocket request guard.
+/// fn some_function(db: &Db) {
+///     let new_user = CreateAssetType::builder()
+///         .name("Charlie Region")
+///         .build()
+///         .insert(db)
+///         .unwrap();
+/// }
+/// ```
+#[derive(Debug, Deserialize, Insertable, TypedBuilder, FromForm)]
+#[table_name = "asset_types"]
+pub struct CreateAssetType {
+    name: String,
+}
+
+impl CreateAssetType {
+    /// The name of the `AssetType` to be created.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// Insert the `AssetType` into the database and return it.
+    ///
+    /// See the struct documentation for an example.
+    pub fn insert(&self, c: &PubDb) -> Result<AssetType> {
+        use self::asset_types::dsl::*;
+
+        diesel::insert_into(asset_types)
+            .values(self)
+            .get_result(c.db())
+            .chain_err(|| "unable to insert asset type")
     }
 }

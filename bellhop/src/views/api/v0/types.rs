@@ -1,11 +1,13 @@
 use crate::errors::*;
 use crate::internal::db::Db;
 use crate::models::asset::Asset;
-use crate::models::asset_type::AssetType;
+use crate::models::asset_type::{AssetType, CreateAssetType};
 use crate::models::tag_type::TagType;
 use crate::models::user::User;
 
 use diesel::prelude::*;
+
+use rocket::http::hyper::header::Location;
 
 use rocket_contrib::json::Json;
 
@@ -18,6 +20,37 @@ pub fn list(db: Db, _user: User) -> Result<Json<Vec<AssetType>>> {
         .chain_err(|| "failed to list asset types")?;
 
     Ok(Json(list))
+}
+
+#[derive(Debug, Responder)]
+#[response(status = 201)]
+pub struct CreateSuccess {
+    body: Json<AssetType>,
+    location: Location,
+}
+
+#[derive(Debug, Responder)]
+pub enum Create {
+    Success(CreateSuccess),
+
+    #[response(status = 403)]
+    Forbidden(()),
+}
+
+#[post("/", data = "<create>", format = "application/json")]
+pub fn create(db: Db, user: User, create: Json<CreateAssetType>) -> Result<Create> {
+    if !user.can_write() {
+        return Ok(Create::Forbidden(()))
+    }
+
+    let created = create.insert(&db.into())?;
+
+    let result = CreateSuccess {
+        location: Location(uri!(detail: type_id = created.id()).to_string()),
+        body: Json(created),
+    };
+
+    Ok(Create::Success(result))
 }
 
 #[get("/<type_id>", format = "application/json")]
