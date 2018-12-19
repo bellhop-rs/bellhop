@@ -99,8 +99,10 @@ impl Bellhop {
                     views::api::v0::types::list,
                     views::api::v0::types::detail,
                     views::api::v0::types::tag_types,
+                    views::api::v0::types::tag_type_detail,
                     views::api::v0::types::assets,
                     views::api::v0::types::create,
+                    views::api::v0::types::create_tag_type,
                 ],
             )
             .mount(
