@@ -2,8 +2,6 @@ use crate::errors::*;
 use crate::internal::db::Db;
 use crate::models::user::User;
 
-use diesel;
-
 use rocket_contrib::templates::Template;
 
 #[get("/show/<user_id>")]
