@@ -8,7 +8,6 @@ use crate::models::lease::{CreateLeaseForm, Lease};
 use crate::models::tag::Tag;
 use crate::models::tag_type::TagType;
 use crate::models::user::User;
-use crate::schema::leases;
 
 use diesel;
 use diesel::prelude::*;
@@ -35,12 +34,7 @@ pub(crate) fn create_lease(
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::assets::dsl::*;
 
-    let create_lease = form.into_inner().into_create_lease(user.id());
-
-    let lease: Lease = diesel::insert_into(leases::table)
-        .values(&create_lease)
-        .get_result(&*db)
-        .chain_err(|| "unable to insert new lease")?;
+    let lease = form.into_inner().into_create_lease(user.id()).insert(&(&*db).into())?;
 
     let to_update = assets.filter(id.eq(asset_id).and(lease_id.is_null()));
 
@@ -72,50 +66,16 @@ pub(crate) fn delete_lease(
     user: User,
     hooks: State<Hooks>,
 ) -> Result<Option<StdResult<Redirect, Status>>> {
-    use crate::schema::leases::dsl as leases;
+    use crate::views::api::v0::assets as api;
 
-    let asset = match Asset::by_id(&db, asset_id)? {
-        Some(x) => x,
-        None => return Ok(None),
-    };
-
-    let lease_id = match asset.lease_id() {
-        Some(x) => x,
-        None => return Ok(None),
-    };
-
-    let lease = match Lease::by_id(&*db, lease_id)? {
-        Some(x) => x,
-        None => return Ok(None),
-    };
-
-    let num_deleted_rows = match diesel::delete(leases::leases)
-        .filter(leases::id.eq(lease_id).and(leases::user_id.eq(user.id())))
-        .execute(&*db)
-    {
-        Ok(x) => x,
-        Err(e) => bail!("Error deleting lease: {}", e),
-    };
-
-    println!(
-        "Deleted {} rows for lease id {}",
-        num_deleted_rows, lease_id
-    );
-
-    let retval = match num_deleted_rows {
-        1 => {
+    match api::delete_lease(asset_id, db, user, hooks)? {
+        Some(Status::NoContent) => {
             let dest = format!("/assets/{}", asset_id);
             Ok(Some(Ok(Redirect::to(dest))))
         }
-        _ => return Ok(Some(Err(Status::Forbidden))),
-    };
-
-    let asset_type = AssetType::by_id(&*db, asset.type_id())?.chain_err(|| "missing asset_type")?;
-
-    let data = HookData::new(&lease, &asset, &asset_type);
-    hooks.returned(&*db, data)?;
-
-    retval
+        Some(x) => Ok(Some(Err(x))),
+        None => Ok(None),
+    }
 }
 
 #[get("/<asset_id>")]
