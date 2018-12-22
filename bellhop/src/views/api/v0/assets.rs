@@ -1,10 +1,8 @@
 use crate::errors::*;
 use crate::internal::db::Db;
 use crate::models::asset::Asset;
-use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
 use crate::models::tag::Tag;
-use crate::models::tag_type::TagType;
 use crate::models::user::User;
 
 use diesel::prelude::*;
@@ -31,33 +29,15 @@ pub fn detail(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Asset>>>
 }
 
 #[get("/<asset_id>/tags", format = "application/json")]
-pub fn tags(
-    asset_id: i32,
-    db: Db,
-    _user: User,
-) -> Result<Option<Json<Vec<(TagType, Option<Tag>)>>>> {
-    use crate::schema::tag_types::dsl as tt;
-    use crate::schema::tags::dsl as t;
-
+pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Tag>>>> {
     let asset = match Asset::by_id(&*db, asset_id)? {
         Some(a) => a,
         None => return Ok(None),
     };
 
-    let asset_type = match AssetType::by_id(&*db, asset.type_id())? {
-        Some(x) => x,
-        None => return Ok(None),
-    };
-
-    let tags = tt::tag_types
-        .left_outer_join(t::tags)
-        .filter(
-            tt::asset_type_id
-                .eq(asset_type.id())
-                .and(t::asset_id.eq(asset_id)),
-        )
+    let tags = Tag::belonging_to(&asset)
         .get_results(&*db)
-        .chain_err(|| "unable to get tags for asset")?;
+        .chain_err(|| "unable to fetch tags for asset")?;
 
     Ok(Some(Json(tags)))
 }
