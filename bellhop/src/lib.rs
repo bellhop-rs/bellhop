@@ -109,6 +109,8 @@ impl Bellhop {
                 "/api/v0/assets/",
                 routes![
                     views::api::v0::assets::create,
+                    views::api::v0::assets::create_lease,
+                    views::api::v0::assets::delete_lease,
                     views::api::v0::assets::list,
                     views::api::v0::assets::detail,
                     views::api::v0::assets::tags,

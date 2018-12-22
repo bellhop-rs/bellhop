@@ -1,4 +1,5 @@
 //! A `Lease` is a duration of time that a `User` owns an `Asset`.
+use crate::db::Db as PubDb;
 use crate::errors::*;
 use crate::schema::leases;
 
@@ -70,18 +71,21 @@ impl Lease {
 ///
 /// ## Example
 ///
-/// ```
+/// ```no_run
+/// use bellhop::db::Db;
 /// use bellhop::models::lease::CreateLease;
 ///
 /// use chrono::prelude::*;
 ///
-/// let lease = CreateLease::builder()
-///     .user_id(1)
-///     .start_time(Utc::now())
-///     .end_time(Utc::now())
-///     .build();
-///
-/// // TODO: Demonstrate saving a Lease, when that's implemented.
+/// fn some_function(db: &Db) {
+///     let lease = CreateLease::builder()
+///         .user_id(1)
+///         .start_time(Utc::now())
+///         .end_time(Utc::now())
+///         .build()
+///         .insert(db)
+///         .unwrap();
+/// }
 /// ```
 #[derive(Debug, Deserialize, Insertable, TypedBuilder)]
 #[table_name = "leases"]
@@ -107,9 +111,19 @@ impl CreateLease {
     pub fn end_time(&self) -> DateTime<Utc> {
         self.end_time
     }
+
+    /// Insert the `Lease` into the database and return it.
+    pub fn insert(&self, c: &PubDb) -> Result<Lease> {
+        use self::leases::dsl::*;
+
+        diesel::insert_into(leases)
+            .values(self)
+            .get_result(c.db())
+            .chain_err(|| "unable to insert lease")
+    }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Deserialize)]
 struct DateField(pub DateTime<Utc>);
 
 impl Deref for DateField {
@@ -137,7 +151,7 @@ impl<'v> FromFormValue<'v> for DateField {
     }
 }
 
-#[derive(Debug, FromForm)]
+#[derive(Debug, FromForm, Deserialize)]
 pub(crate) struct CreateLeaseForm {
     end_time: DateField,
 }
