@@ -3,6 +3,7 @@
 //! Examples of assets could include lab computers, smartphones, or test
 //! credentials.
 
+use crate::db::Db as PubDb;
 use crate::errors::*;
 use crate::schema::assets;
 
@@ -75,5 +76,56 @@ impl Asset {
     /// The human-readable name of this `Asset`.
     pub fn name(&self) -> &str {
         &self.name
+    }
+}
+
+/// The insertable companion of `Asset`.
+///
+/// ## Example
+///
+/// ```no_run
+/// use bellhop::db::Db;
+/// use bellhop::models::asset::CreateAsset;
+///
+/// // The `db` argument could come from implementing `bellhop::hooks::Hook`, or
+/// // as a Rocket request guard.
+/// fn some_function(db: &Db) {
+///     let new_user = CreateAsset::builder()
+///         .name("Pizza Slice")
+///         .type_id(1)
+///         .lease_id(Some(43)) // Lease the asset immediately upon creation.
+///         .build()
+///         .insert(db)
+///         .unwrap();
+/// }
+/// ```
+#[derive(Debug, Deserialize, Insertable, TypedBuilder, FromForm)]
+#[table_name = "assets"]
+pub struct CreateAsset {
+    type_id: i32,
+
+    #[serde(default)]
+    #[default]
+    lease_id: Option<i32>,
+
+    name: String,
+}
+
+impl CreateAsset {
+    /// The name of the `AssetType` to be created.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// Insert the `AssetType` into the database and return it.
+    ///
+    /// See the struct documentation for an example.
+    pub fn insert(&self, c: &PubDb) -> Result<Asset> {
+        use self::assets::dsl::*;
+
+        diesel::insert_into(assets)
+            .values(self)
+            .get_result(c.db())
+            .chain_err(|| "unable to insert asset")
     }
 }
