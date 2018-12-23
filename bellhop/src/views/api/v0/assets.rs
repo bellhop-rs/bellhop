@@ -1,18 +1,18 @@
 use crate::errors::*;
+use crate::hooks::Data as HookData;
 use crate::internal::db::Db;
-use crate::models::asset_type::AssetType;
+use crate::internal::hooks::Hooks;
 use crate::models::asset::{Asset, CreateAsset};
-use crate::models::lease::{Lease, CreateLeaseForm};
+use crate::models::asset_type::AssetType;
+use crate::models::lease::{CreateLeaseForm, Lease};
 use crate::models::tag::Tag;
 use crate::models::user::User;
-use crate::internal::hooks::Hooks;
-use crate::hooks::Data as HookData;
 
 use diesel::prelude::*;
 
-use rocket::request::State;
 use rocket::http::hyper::header::Location;
 use rocket::http::Status;
+use rocket::request::State;
 
 use rocket_contrib::json::Json;
 
@@ -110,7 +110,13 @@ pub(crate) enum CreateLeaseResponse {
 }
 
 #[put("/<asset_id>/lease", data = "<create>", format = "application/json")]
-pub(crate) fn create_lease(asset_id: i32, db: Db, user: User, create: Json<CreateLeaseForm>, hooks: State<Hooks>) -> Result<CreateLeaseResponse> {
+pub(crate) fn create_lease(
+    asset_id: i32,
+    db: Db,
+    user: User,
+    create: Json<CreateLeaseForm>,
+    hooks: State<Hooks>,
+) -> Result<CreateLeaseResponse> {
     use crate::schema::assets::dsl::*;
 
     let create_lease = create.into_inner().into_create_lease(user.id());
@@ -139,7 +145,12 @@ pub(crate) fn create_lease(asset_id: i32, db: Db, user: User, create: Json<Creat
 }
 
 #[delete("/<asset_id>/lease")]
-pub(crate) fn delete_lease(asset_id: i32, db: Db, user: User, hooks: State<Hooks>) -> Result<Option<Status>> {
+pub(crate) fn delete_lease(
+    asset_id: i32,
+    db: Db,
+    user: User,
+    hooks: State<Hooks>,
+) -> Result<Option<Status>> {
     use crate::schema::leases::dsl as leases;
 
     let asset = match Asset::by_id(&db, asset_id)? {
@@ -171,9 +182,7 @@ pub(crate) fn delete_lease(asset_id: i32, db: Db, user: User, hooks: State<Hooks
     );
 
     let retval = match num_deleted_rows {
-        1 => {
-            Ok(Some(Status::NoContent))
-        }
+        1 => Ok(Some(Status::NoContent)),
         _ => return Ok(Some(Status::Forbidden)),
     };
 
