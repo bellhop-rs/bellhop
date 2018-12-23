@@ -114,6 +114,8 @@ impl Bellhop {
                     views::api::v0::assets::list,
                     views::api::v0::assets::detail,
                     views::api::v0::assets::tags,
+                    views::api::v0::assets::tag_detail,
+                    views::api::v0::assets::create_tag,
                     views::api::v0::assets::lease,
                 ],
             )

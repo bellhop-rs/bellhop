@@ -5,7 +5,7 @@ use crate::internal::hooks::Hooks;
 use crate::models::asset::{Asset, CreateAsset};
 use crate::models::asset_type::AssetType;
 use crate::models::lease::{CreateLeaseForm, Lease};
-use crate::models::tag::Tag;
+use crate::models::tag::{CreateOwnedTag, Tag};
 use crate::models::user::User;
 
 use diesel::prelude::*;
@@ -15,6 +15,8 @@ use rocket::http::Status;
 use rocket::request::State;
 
 use rocket_contrib::json::Json;
+
+use std::result::Result as StdResult;
 
 use super::Paged;
 
@@ -79,6 +81,65 @@ pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Paged<Tag>
         .chain_err(|| "unable to fetch tags for asset")?;
 
     Ok(Some(Json(Paged::new(tags))))
+}
+
+#[derive(Debug, Responder)]
+#[response(status = 201)]
+pub struct TagCreated {
+    body: Json<Tag>,
+    location: Location,
+}
+
+#[post("/<asset_id>/tags", data = "<create>", format = "application/json")]
+pub fn create_tag(
+    asset_id: i32,
+    db: Db,
+    user: User,
+    create: Json<CreateOwnedTag>,
+) -> Result<StdResult<TagCreated, Status>> {
+    if !user.can_write() {
+        return Ok(Err(Status::Forbidden));
+    }
+
+    if let None = Asset::by_id(&*db, asset_id)? {
+        return Ok(Err(Status::NotFound));
+    }
+
+    let form = create.into_inner().into_create_tag(asset_id);
+
+    let created = form.insert(&db.into())?;
+
+    let result = TagCreated {
+        location: Location(
+            uri!(
+                tag_detail: asset_id = created.asset_id(),
+                tag_type_id = created.tag_type_id()
+            )
+            .to_string(),
+        ),
+        body: Json(created),
+    };
+
+    Ok(Ok(result))
+}
+
+#[get("/<asset_id>/tags/<tag_type_id>", format = "application/json")]
+pub fn tag_detail(
+    asset_id: i32,
+    tag_type_id: i32,
+    db: Db,
+    _user: User,
+) -> Result<Option<Json<Tag>>> {
+    use crate::schema::tags::dsl as t;
+
+    let tag: Option<Json<Tag>> = t::tags
+        .filter(t::asset_id.eq(asset_id).and(t::tag_type_id.eq(tag_type_id)))
+        .get_result(&*db)
+        .optional()
+        .chain_err(|| "unable to get tag details")?
+        .map(Json);
+
+    Ok(tag)
 }
 
 #[get("/<asset_id>/lease", format = "application/json")]
