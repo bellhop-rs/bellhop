@@ -12,15 +12,17 @@ use rocket::http::Status;
 
 use rocket_contrib::json::Json;
 
+use super::Paged;
+
 #[get("/", format = "application/json")]
-pub fn list(db: Db, _user: User) -> Result<Json<Vec<AssetType>>> {
+pub fn list(db: Db, _user: User) -> Result<Json<Paged<AssetType>>> {
     use crate::schema::asset_types::dsl::*;
 
     let list = asset_types
         .load::<AssetType>(&*db)
         .chain_err(|| "failed to list asset types")?;
 
-    Ok(Json(list))
+    Ok(Json(Paged::new(list)))
 }
 
 #[derive(Debug, Responder)]
@@ -127,7 +129,7 @@ pub fn tag_type_detail(
 }
 
 #[get("/<type_id>/tag-types", format = "application/json")]
-pub fn tag_types(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<TagType>>>> {
+pub fn tag_types(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Paged<TagType>>>> {
     let asset_type = match AssetType::by_id(&*db, type_id)? {
         Some(a) => a,
         None => return Ok(None),
@@ -137,11 +139,11 @@ pub fn tag_types(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Ta
         .load(&*db)
         .chain_err(|| "unable to get tag types belonging to an asset type")?;
 
-    Ok(Some(Json(types)))
+    Ok(Some(Json(Paged::new(types))))
 }
 
 #[get("/<type_id>/assets", format = "application/json")]
-pub fn assets(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Asset>>>> {
+pub fn assets(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Paged<Asset>>>> {
     let asset_type = match AssetType::by_id(&*db, type_id)? {
         Some(a) => a,
         None => return Ok(None),
@@ -151,5 +153,5 @@ pub fn assets(type_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Asset
         .load(&*db)
         .chain_err(|| "unable to get assets belonging to an asset type")?;
 
-    Ok(Some(Json(assets)))
+    Ok(Some(Json(Paged::new(assets))))
 }

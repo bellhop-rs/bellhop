@@ -16,15 +16,17 @@ use rocket::http::Status;
 
 use rocket_contrib::json::Json;
 
+use super::Paged;
+
 #[get("/", format = "application/json")]
-pub fn list(db: Db, _user: User) -> Result<Json<Vec<Asset>>> {
+pub fn list(db: Db, _user: User) -> Result<Json<Paged<Asset>>> {
     use crate::schema::assets::dsl::*;
 
     let list = assets
         .load::<Asset>(&*db)
         .chain_err(|| "failed to list assets")?;
 
-    Ok(Json(list))
+    Ok(Json(Paged::new(list)))
 }
 
 #[derive(Debug, Responder)]
@@ -66,7 +68,7 @@ pub fn detail(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Asset>>>
 }
 
 #[get("/<asset_id>/tags", format = "application/json")]
-pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Tag>>>> {
+pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Paged<Tag>>>> {
     let asset = match Asset::by_id(&*db, asset_id)? {
         Some(a) => a,
         None => return Ok(None),
@@ -76,7 +78,7 @@ pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Vec<Tag>>>
         .get_results(&*db)
         .chain_err(|| "unable to fetch tags for asset")?;
 
-    Ok(Some(Json(tags)))
+    Ok(Some(Json(Paged::new(tags))))
 }
 
 #[get("/<asset_id>/lease", format = "application/json")]

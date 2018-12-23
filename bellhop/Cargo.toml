@@ -23,6 +23,9 @@ serde_derive = "1.0.80"
 
 typed-builder = "0.1.1"
 
+url = "1.7.2"
+url_serde = "0.2.0"
+
 [dependencies.rocket_contrib]
 version = "0.4.0"
 default-features = false
