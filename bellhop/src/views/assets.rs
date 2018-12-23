@@ -34,7 +34,10 @@ pub(crate) fn create_lease(
 ) -> Result<Option<StdResult<Redirect, Status>>> {
     use crate::schema::assets::dsl::*;
 
-    let lease = form.into_inner().into_create_lease(user.id()).insert(&(&*db).into())?;
+    let lease = form
+        .into_inner()
+        .into_create_lease(user.id())
+        .insert(&(&*db).into())?;
 
     let to_update = assets.filter(id.eq(asset_id).and(lease_id.is_null()));
 

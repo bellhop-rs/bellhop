@@ -25,7 +25,7 @@ impl<T> Paged<T> {
             pages: Pages {
                 next: None,
                 prev: None,
-            }
+            },
         }
     }
 }
