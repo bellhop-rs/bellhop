@@ -1,0 +1,482 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.0
+  title: Bellhop
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /types:
+    get:
+      operationId: listAssetTypes
+      summary: List all asset types
+      responses:
+        '200':
+          description: A paged array of asset types
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/AssetTypes"
+    post:
+      operationId: createAssetType
+      summary: Create a new asset type
+      requestBody:
+        description: Asset type to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAssetType"
+      responses:
+        '201':
+          description: created asset type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetType"
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+  /types/{asset_type_id}:
+    get:
+      operationId: showAssetType
+      summary: Show details of an asset type
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+      responses:
+        '200':
+          description: Details of an asset type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetType"
+  '/types/{asset_type_id}/tag-types':
+    get:
+      operationId: listTagTypes
+      summary: List tag types that belong to an asset type
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+      responses:
+        '200':
+          description: A paged array of tag types
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/TagTypes"
+    post:
+      operationId: createTagType
+      summary: Create a new tag type
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+      requestBody:
+        description: Tag type to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTagType"
+      responses:
+        '201':
+          description: created tag type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagType"
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+  /types/{asset_type_id}/tag-types/{tag_type_id}:
+    get:
+      operationId: showTagType
+      summary: Show details of a tag type
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+        - $ref: "#/components/parameters/tag_type_id"
+      responses:
+        '200':
+          description: Details of a tag type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagType"
+  /types/{asset_type_id}/assets:
+    get:
+      operationId: listSubAssets
+      summary: List assets that belong to an asset type
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+      responses:
+        '200':
+          description: A paged array of assets
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Assets"
+  /assets:
+    get:
+      operationId: listAssets
+      summary: List all assets
+      responses:
+        '200':
+          description: A paged array of assets
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Assets"
+    post:
+      operationId: createAsset
+      summary: Create a new asset
+      requestBody:
+        description: Asset to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAsset"
+      responses:
+        '201':
+          description: created asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+  /assets/{asset_id}:
+    get:
+      operationId: showAsset
+      summary: Show details of an asset
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      responses:
+        '200':
+          description: Details of an asset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+  /assets/{asset_id}/tags:
+    get:
+      operationId: listTags
+      summary: List tags that belong to an asset
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      responses:
+        '200':
+          description: A paged array of tags
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Tags"
+    post:
+      operationId: createTag
+      summary: Create a new tag
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      requestBody:
+        description: Tag to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTag"
+      responses:
+        '201':
+          description: created tag
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+  /assets/{asset_id}/tags/{tag_type_id}:
+    get:
+      operationId: showTag
+      summary: Show details of a tag
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+        - $ref: "#/components/parameters/tag_type_id"
+      responses:
+        '200':
+          description: Details of a tag
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+  /assets/{asset_id}/lease:
+    get:
+      operationId: showLease
+      summary: Show details of an asset's lease
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      responses:
+        '200':
+          description: Details of an asset's lease
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lease"
+        '404':
+          description: Asset not currently leased, or asset not found
+    put:
+      operationId: createLease
+      summary: Create a new lease for this asset
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      responses:
+        '404':
+          description: Asset not found
+        '409':
+          description: A lease already exists for that asset
+        '201':
+          description: created lease
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lease"
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+      requestBody:
+        description: Lease to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLease"
+    delete:
+      operationId: deleteLease
+      summary: Release a lease ahead of its end time
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+      responses:
+        '404':
+          description: Asset or lease not found
+        '204':
+          description: Lease was deleted
+components:
+  parameters:
+    tag_type_id:
+      name: tag_type_id
+      in: path
+      description: Identifier of the tag type
+      required: true
+      schema:
+        type: integer
+        format: int32
+    asset_id:
+      name: asset_id
+      in: path
+      description: Identifier of the asset
+      required: true
+      schema:
+        type: integer
+        format: int32
+    asset_type_id:
+      name: asset_type_id
+      in: path
+      description: Identifier of the asset type
+      required: true
+      schema:
+        type: integer
+        format: int32
+  headers:
+    Location:
+      description: The URL of the newly created resource
+      schema:
+        type: string
+  schemas:
+    Tags:
+      required:
+        - items
+        - pages
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+        pages:
+          $ref: "#/components/schemas/Pages"
+    CreateTag:
+      required:
+        - tag_type_id
+        - value
+      properties:
+        value:
+          type: string
+        tag_type_id:
+          type: integer
+          format: int32
+    CreateLease:
+      required:
+        - end_time
+      properties:
+        end_time:
+          type: string
+          format: date-time
+    Lease:
+      required:
+        - id
+        - user_id
+        - last_notified
+        - end_time
+      properties:
+        id:
+          type: integer
+          format: int32
+        user_id:
+          type: integer
+          format: int32
+        last_notified:
+          type: string
+          format: date-time
+          nullable: true
+        end_time:
+          type: string
+          format: date-time
+        start_time:
+          type: string
+          format: date-time
+    Tag:
+      required:
+        - tag_type_id
+        - asset_id
+        - value
+      properties:
+        asset_id:
+          type: integer
+          format: int32
+        value:
+          type: string
+        tag_type_id:
+          type: integer
+          format: int32
+    CreateTagType:
+      required:
+        - name
+        - detail_only
+        - rightness
+      properties:
+        name:
+          type: string
+        detail_only:
+          type: boolean
+        rightness:
+          type: integer
+          format: int32
+    CreateAsset:
+      required:
+        - type_id
+        - name
+      properties:
+        type_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        lease_id:
+          nullable: true
+          type: integer
+          format: int32
+    Asset:
+      required:
+        - id
+        - type_id
+        - lease_id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        type_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        lease_id:
+          nullable: true
+          type: integer
+          format: int32
+    Assets:
+      required:
+        - items
+        - pages
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Asset"
+        pages:
+          $ref: "#/components/schemas/Pages"
+    TagType:
+      required:
+        - id
+        - asset_type_id
+        - name
+        - detail_only
+        - rightness
+      properties:
+        id:
+          type: integer
+          format: int32
+        asset_type_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        detail_only:
+          type: boolean
+        rightness:
+          type: integer
+          format: int32
+    TagTypes:
+      required:
+        - items
+        - pages
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagType"
+        pages:
+          $ref: "#/components/schemas/Pages"
+    Pages:
+      required:
+        - next
+        - prev
+      properties:
+        next:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+    CreateAssetType:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    AssetType:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    AssetTypes:
+      required:
+        - items
+        - pages
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetType"
+        pages:
+          $ref: "#/components/schemas/Pages"
