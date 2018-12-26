@@ -93,6 +93,7 @@ impl Bellhop {
     /// Launch the Bellhop server.
     pub fn start(self) {
         let mut r = rocket::ignite()
+            .mount("/api/v0/", routes![views::api::v0::docs])
             .mount(
                 "/api/v0/types/",
                 routes![

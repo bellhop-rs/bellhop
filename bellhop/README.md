@@ -29,3 +29,13 @@ After performing the setup, running the server is pretty simple:
 ```
 cargo run
 ```
+
+
+## Unsorted Notes
+
+### Generating API Documentation
+
+```
+npm install redoc-cli
+export REDOC_CLI="$(pwd)/node_modules/redoc-cli/index.js"
+```

@@ -1,6 +1,8 @@
 pub mod assets;
 pub mod types;
 
+use rocket::response::content::Html;
+
 use url::Url;
 
 #[derive(Debug, Serialize)]
@@ -28,4 +30,11 @@ impl<T> Paged<T> {
             },
         }
     }
+}
+
+include!(concat!(env!("OUT_DIR"), "/redoc_static.rs"));
+
+#[get("/")]
+pub fn docs() -> Html<&'static str> {
+    Html(HTML)
 }
