@@ -12,6 +12,10 @@ license = "Apache-2.0"
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.2.0-dev" }
 
+native-tls = "0.2"
+
+rocket = "0.4.0"
+
 serde = "1.0.80"
 serde_derive = "1.0.80"
 
@@ -20,6 +24,7 @@ serde_derive = "1.0.80"
 git = "https://github.com/lettre/lettre"
 version = "0.9"
 rev = "c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49"
+features = ["serde-impls", "native-tls"]
 
 [dependencies.lettre_email]
 # lettre 0.8 depends on an old version of openssl that isn't available on travis

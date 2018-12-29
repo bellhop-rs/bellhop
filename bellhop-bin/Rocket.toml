@@ -1,5 +1,10 @@
 [global]
 template_dir = "../bellhop/templates"
 
+[global.hook_email]
+from = "bellhop@example.com"
+smtp_host = "smtp.example.com"
+smtp_port = 25
+
 [global.databases]
 bellhop = { url = "postgres://bellhop:bellhop@localhost/bellhop" }
