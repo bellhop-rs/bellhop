@@ -1,5 +1,6 @@
 use crate::errors::*;
 use crate::internal::db::Db;
+use crate::internal::uri::Base;
 use crate::models::asset::Asset;
 use crate::models::asset_type::{AssetType, CreateAssetType};
 use crate::models::tag_type::{CreateOwnedTagType, TagType};
@@ -40,15 +41,16 @@ pub enum Create {
 }
 
 #[post("/", data = "<create>", format = "application/json")]
-pub fn create(db: Db, user: User, create: Json<CreateAssetType>) -> Result<Create> {
+pub fn create(db: Db, user: User, create: Json<CreateAssetType>, base: Base) -> Result<Create> {
     if !user.can_write() {
         return Ok(Create::Status(Status::Forbidden));
     }
 
     let created = create.insert(&db.into())?;
+    let location = uri!(detail: type_id = created.id());
 
     let result = CreateSuccess {
-        location: Location(uri!(detail: type_id = created.id()).to_string()),
+        location: Location(base.join(location).to_string()),
         body: Json(created),
     };
 
@@ -82,6 +84,7 @@ pub fn create_tag_type(
     db: Db,
     user: User,
     create: Json<CreateOwnedTagType>,
+    base: Base,
 ) -> Result<CreateTagType> {
     if !user.can_write() {
         return Ok(CreateTagType::Status(Status::Forbidden));
@@ -94,15 +97,13 @@ pub fn create_tag_type(
     let form = create.into_inner().into_create_tag_type(type_id);
 
     let created = form.insert(&db.into())?;
+    let location = uri!(
+        tag_type_detail: type_id = type_id,
+        tag_type_id = created.id()
+    );
 
     let result = CreateTagTypeSuccess {
-        location: Location(
-            uri!(
-                tag_type_detail: type_id = type_id,
-                tag_type_id = created.id()
-            )
-            .to_string(),
-        ),
+        location: Location(base.join(location).to_string()),
         body: Json(created),
     };
 

@@ -2,6 +2,7 @@ use crate::errors::*;
 use crate::hooks::Data as HookData;
 use crate::internal::db::Db;
 use crate::internal::hooks::Hooks;
+use crate::internal::uri::Base;
 use crate::models::asset::{Asset, CreateAsset};
 use crate::models::asset_type::AssetType;
 use crate::models::lease::{CreateLeaseForm, Lease};
@@ -46,15 +47,16 @@ pub enum Create {
 }
 
 #[post("/", data = "<create>", format = "application/json")]
-pub fn create(db: Db, user: User, create: Json<CreateAsset>) -> Result<Create> {
+pub fn create(db: Db, user: User, create: Json<CreateAsset>, base: Base) -> Result<Create> {
     if !user.can_write() {
         return Ok(Create::Status(Status::Forbidden));
     }
 
     let created = create.insert(&db.into())?;
+    let location = uri!(detail: asset_id = created.id());
 
     let result = CreateSuccess {
-        location: Location(uri!(detail: asset_id = created.id()).to_string()),
+        location: Location(base.join(location).to_string()),
         body: Json(created),
     };
 
@@ -96,6 +98,7 @@ pub fn create_tag(
     db: Db,
     user: User,
     create: Json<CreateOwnedTag>,
+    base: Base,
 ) -> Result<StdResult<TagCreated, Status>> {
     if !user.can_write() {
         return Ok(Err(Status::Forbidden));
@@ -108,15 +111,13 @@ pub fn create_tag(
     let form = create.into_inner().into_create_tag(asset_id);
 
     let created = form.insert(&db.into())?;
+    let location = uri!(
+        tag_detail: asset_id = created.asset_id(),
+        tag_type_id = created.tag_type_id()
+    );
 
     let result = TagCreated {
-        location: Location(
-            uri!(
-                tag_detail: asset_id = created.asset_id(),
-                tag_type_id = created.tag_type_id()
-            )
-            .to_string(),
-        ),
+        location: Location(base.join(location).to_string()),
         body: Json(created),
     };
 

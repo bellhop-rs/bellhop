@@ -8,6 +8,7 @@
 #![allow(proc_macro_derive_resolution_fallback)] // Should be fixed in the next major Diesel version
 #![deny(missing_docs)]
 #![feature(proc_macro_hygiene, decl_macro)]
+#![feature(never_type)]
 
 #[macro_use]
 extern crate diesel;
