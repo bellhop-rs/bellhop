@@ -144,6 +144,10 @@ impl Bellhop {
             .attach(Template::fairing())
             .attach(internal::db::Db::fairing());
 
+        for hook in self.hooks.0.iter() {
+            r = hook.prelaunch(r);
+        }
+
         for auth in self.auths.0.iter() {
             r = auth.prelaunch(r);
         }

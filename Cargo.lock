@@ -126,6 +126,8 @@ dependencies = [
  "bellhop 0.2.0-dev",
  "lettre 0.9.0 (git+https://github.com/lettre/lettre?rev=c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49)",
  "lettre_email 0.9.0 (git+https://github.com/lettre/lettre?rev=c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49)",
+ "native-tls 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.80 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.80 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

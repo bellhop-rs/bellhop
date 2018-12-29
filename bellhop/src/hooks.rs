@@ -13,6 +13,8 @@ use crate::models::asset::Asset;
 use crate::models::asset_type::AssetType;
 use crate::models::lease::Lease;
 
+use rocket::Rocket;
+
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -125,6 +127,12 @@ impl<'a> Data<'a> {
 
 /// Trait for plugins that want notifications when `Lease` events are generated.
 pub trait Hook: fmt::Debug {
+    /// Perform Rocket related setup, like attaching routes and fairings,
+    /// reading configuration values, etc.
+    fn prelaunch(&self, rocket: Rocket) -> Rocket {
+        rocket
+    }
+
     /// Called for each hook when a lease is created.
     fn leased(&self, _conn: &Db, _data: Data) -> Result<(), Error> {
         Ok(())
