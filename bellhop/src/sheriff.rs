@@ -10,6 +10,7 @@ use diesel::prelude::*;
 
 use chrono::prelude::*;
 
+/// NB: Not really safe to run two copies of this at the same time.
 pub(crate) fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<()> {
     use crate::schema::asset_types::dsl as at;
     use crate::schema::leases::dsl as l;
@@ -17,6 +18,7 @@ pub(crate) fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<(
     let now = Utc::now();
 
     let all_leases: Vec<Lease> = l::leases
+        .filter(l::last_notified.is_null())
         .load::<Lease>(c)
         .chain_err(|| "failed to get leases for eviction notices")?;
 
@@ -26,7 +28,6 @@ pub(crate) fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<(
 
         if now > (lease.end_time() - margin) {
             // TODO: This is an N+1 queries bug
-            // TODO: Check/set last notified time
             let (asset, asset_type): (Asset, AssetType) = Asset::belonging_to(&lease)
                 .inner_join(at::asset_types)
                 .get_result(c)
@@ -35,6 +36,11 @@ pub(crate) fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<(
             let data = HookData::new(&lease, &asset, &asset_type);
 
             hooks.warned(c, data)?;
+
+            diesel::update(&lease)
+                .set(l::last_notified.eq(Some(now)))
+                .execute(c)
+                .chain_err(|| "unable to set last notified for lease")?;
         }
     }
     Ok(())
