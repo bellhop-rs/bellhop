@@ -11,6 +11,7 @@ table! {
     asset_types (id) {
         id -> Int4,
         name -> Varchar,
+        plural_name -> Varchar,
     }
 }
 
