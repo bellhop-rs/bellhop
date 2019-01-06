@@ -11,6 +11,7 @@ use diesel::prelude::*;
 pub struct AssetType {
     id: i32,
     name: String,
+    plural_name: String,
 }
 
 impl AssetType {
@@ -34,6 +35,11 @@ impl AssetType {
     /// The human-readable name of this `AssetType`.
     pub fn name(&self) -> &str {
         &self.name
+    }
+
+    /// The human-readable pluralized name of this `AssetType`.
+    pub fn plural_name(&self) -> &str {
+        &self.plural_name
     }
 }
 
@@ -59,6 +65,7 @@ impl AssetType {
 #[table_name = "asset_types"]
 pub struct CreateAssetType {
     name: String,
+    plural_name: String,
 }
 
 impl CreateAssetType {
