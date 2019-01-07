@@ -1,13 +1,12 @@
 [package]
 name = "bellhop"
-version = "0.2.0-dev"
+version = "0.2.0"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
     "Tai Dickerson",
 ]
 edition = "2018"
-publish = false
 license = "Apache-2.0"
 homepage = "https://bellhop.rs/"
 repository = "https://github.com/bellhop-rs/bellhop"
