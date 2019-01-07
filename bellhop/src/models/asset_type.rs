@@ -56,6 +56,7 @@ impl AssetType {
 /// fn some_function(db: &Db) {
 ///     let new_user = CreateAssetType::builder()
 ///         .name("Charlie Region")
+///         .plural_name("Charlie Regions")
 ///         .build()
 ///         .insert(db)
 ///         .unwrap();

@@ -56,7 +56,7 @@ use rocket_contrib::templates::Template;
 ///
 /// ## See Also
 ///
-/// The `bellhop-bin` crate has a more fully featured example that includes
+/// The `bellhop-demo` crate has a more fully featured example that includes
 /// attaching plugins.
 #[derive(Debug, Default)]
 pub struct Bellhop {
