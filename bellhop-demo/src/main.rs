@@ -1,4 +1,4 @@
-//! bellhop-bin is an example of how to attach different authentication and hook
+//! bellhop-demo is an example of how to attach different authentication and hook
 //! modules to the bellhop library.
 //!
 //! While you can run this without customization, it probably won't be what you

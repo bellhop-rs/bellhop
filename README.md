@@ -22,7 +22,7 @@ For more information, including a live demo, checkout [bellhop.rs][homepage].
 ### Project Structure
 
  * `bellhop/`               - The core library that implements most of Bellhop's features.
- * `bellhop-bin/`           - A runnable example that demos adding hooks and starting the server.
+ * `bellhop-demo/`          - A runnable example that demos adding hooks and starting the server.
  * `bellhop-hook-email/`    - A hook that sends an email when your lease is expiring.
  * `bellhop-hook-jenkins/`  - A hook that starts a Jenkins job for each event.
  * `bellhop-auth-dummy/`    - Authentication plugin that only requires an email address.
@@ -39,7 +39,7 @@ well, with pluggable modules like `bellhop-auth-header`.
 At this point, Bellhop is more like a set of crates you assemble yourself into a web application
 than a web application itself.
 
-A good starting point is getting `bellhop-bin` running, then using that as an example to build
+A good starting point is getting `bellhop-demo` running, then using that as an example to build
 your own deployment.
 
 ### First Time Setup
@@ -116,11 +116,11 @@ $ diesel migration run
 To run Bellhop in "demo" mode:
 
 ```bash
-$ cd bellhop-bin
+$ cd bellhop-demo
 $ cargo run
 ```
 
-Note that `bellhop-bin` doesn't require any kind of passwords to log in. It really isn't suitable
+Note that `bellhop-demo` doesn't require any kind of passwords to log in. It really isn't suitable
 for production use without some customization.
 
 ## License
