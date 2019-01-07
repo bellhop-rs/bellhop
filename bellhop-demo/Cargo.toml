@@ -4,6 +4,9 @@ version = "0.2.0-dev"
 authors = ["Sam Wilson <sawilson@akamai.com>"]
 edition = "2018"
 license = "Apache-2.0"
+homepage = "https://bellhop.rs/"
+repository = "https://github.com/bellhop-rs/bellhop"
+description = "A demo of the bellhop asset reservation web application"
 
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.2.0-dev" }
