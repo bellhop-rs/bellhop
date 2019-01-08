@@ -129,7 +129,6 @@ dependencies = [
  "bellhop 0.2.0",
  "bellhop-auth-dummy 0.2.0",
  "bellhop-auth-header 0.2.0",
- "bellhop-hook-email 0.2.0",
  "bellhop-hook-jenkins 0.2.0",
 ]
 
