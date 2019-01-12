@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-auth-dummy"
-version = "0.2.0"
+version = "0.2.1-dev"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
@@ -13,7 +13,7 @@ repository = "https://github.com/bellhop-rs/bellhop"
 description = "Authentication plugin for bellhop that only requires an email"
 
 [dependencies]
-bellhop = { path = "../bellhop", version = "0.2.0" }
+bellhop = { path = "../bellhop", version = "0.2.1-dev" }
 rocket = "0.4.0"
 serde = "1.0.80"
 serde_derive = "1.0.80"
