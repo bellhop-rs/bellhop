@@ -38,8 +38,13 @@ use crate::hooks::Hook;
 use crate::internal::auth::Auths;
 use crate::internal::hooks::Hooks;
 
+use rocket::config::ConfigError;
+use rocket::fairing::AdHoc;
+
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::Template;
+
+use std::path::PathBuf;
 
 /// Configuration for a Bellhop server.
 ///
@@ -127,10 +132,6 @@ impl Bellhop {
                 "/types",
                 routes![views::types::request_access, views::types::detail],
             )
-            .mount(
-                "/static",
-                StaticFiles::from(concat!(env!("CARGO_MANIFEST_DIR"), "/static")),
-            )
             .mount("/users", routes![views::user::detail])
             .mount(
                 "/assets",
@@ -141,6 +142,23 @@ impl Bellhop {
                 ],
             )
             .mount("/", routes![views::endpoints::sheriff])
+            .attach(AdHoc::on_attach("Static Files Config", |rocket| {
+                let config = rocket.config();
+
+                let path = config
+                    .get_str("static_files_dir")
+                    .map(|x| config.root_relative(x))
+                    .or_else(|e| match e {
+                        ConfigError::Missing(_) => Ok(PathBuf::from(concat!(
+                            env!("CARGO_MANIFEST_DIR"),
+                            "/static"
+                        ))),
+                        other => Err(other),
+                    })
+                    .unwrap();
+
+                Ok(rocket.mount("/static", StaticFiles::from(path)))
+            }))
             .attach(Template::fairing())
             .attach(internal::db::Db::fairing());
 
