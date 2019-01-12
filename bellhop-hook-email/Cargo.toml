@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-hook-email"
-version = "0.2.0"
+version = "0.2.1-dev"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
@@ -13,7 +13,7 @@ repository = "https://github.com/bellhop-rs/bellhop"
 description = "A bellhop hook that sends emails on certain events"
 
 [dependencies]
-bellhop = { path = "../bellhop", version = "0.2.0" }
+bellhop = { path = "../bellhop", version = "0.2.1-dev" }
 
 native-tls = "0.2"
 
