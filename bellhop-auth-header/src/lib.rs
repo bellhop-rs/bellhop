@@ -46,6 +46,7 @@ use rocket::{Outcome, Rocket};
 #[derive(Debug)]
 struct AuthRegex {
     header_name: String,
+    suffix: String,
     re: Regex,
 }
 
@@ -83,12 +84,20 @@ impl Auth for Header {
                 .get_str("auth_header_email_pattern")
                 .unwrap_or(DEFAULT);
 
+            let suffix = rocket
+                .config()
+                .get_str("auth_header_default_domain")
+                .ok()
+                .map(|x| format!("@{}", x))
+                .unwrap_or(String::new());
+
             let re = match Regex::new(re_str) {
                 Ok(x) => x,
                 Err(_) => return Err(rocket),
             };
 
             let state = AuthRegex {
+                suffix,
                 re,
                 header_name: name.to_owned(),
             };
@@ -118,17 +127,21 @@ impl Auth for Header {
             }
         }
 
-        let email = match email {
-            Some(x) => x,
+        let mut email = match email {
+            Some(x) => x.to_owned(),
             None => return Ok(None),
         };
 
-        let user = User::by_email(c, email).map_err(Error::for_kind(ErrorKind::msg(
+        if !email.contains('@') {
+            email.push_str(&auths.suffix);
+        }
+
+        let user = User::by_email(c, &email).map_err(Error::for_kind(ErrorKind::msg(
             "unable to get user for authentication",
         )))?;
 
         match user {
-            None => self.register(c, email).map(Some),
+            None => self.register(c, &email).map(Some),
             x => Ok(x),
         }
     }
