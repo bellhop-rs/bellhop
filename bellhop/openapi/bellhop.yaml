@@ -456,17 +456,23 @@ components:
     CreateAssetType:
       required:
         - name
+        - plural_name
       properties:
         name:
+          type: string
+        plural_name:
           type: string
     AssetType:
       required:
         - id
         - name
+        - plural_name
       properties:
         id:
           type: integer
           format: int32
+        plural_name:
+          type: string
         name:
           type: string
     AssetTypes:
