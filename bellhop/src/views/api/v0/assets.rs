@@ -124,6 +124,32 @@ pub fn create_tag(
     Ok(Ok(result))
 }
 
+#[delete("/<asset_id>/tags/<tag_type_id>", format = "application/json")]
+pub fn delete_tag(
+    asset_id: i32,
+    tag_type_id: i32,
+    db: Db,
+    user: User,
+) -> Result<StdResult<(), Status>> {
+    use crate::schema::tags::dsl as t;
+
+    if !user.can_write() {
+        return Ok(Err(Status::Forbidden));
+    }
+
+    let count: usize = diesel::delete(
+        t::tags.filter(t::asset_id.eq(asset_id).and(t::tag_type_id.eq(tag_type_id))),
+    )
+    .execute(&*db)
+    .chain_err(|| "unable to delete tag")?;
+
+    if count == 1 {
+        Ok(Ok(()))
+    } else {
+        Ok(Err(Status::NotFound))
+    }
+}
+
 #[get("/<asset_id>/tags/<tag_type_id>", format = "application/json")]
 pub fn tag_detail(
     asset_id: i32,
