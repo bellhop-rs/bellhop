@@ -71,6 +71,25 @@ pub fn detail(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Asset>>>
     }
 }
 
+#[delete("/<asset_id>", format = "application/json")]
+pub fn delete(asset_id: i32, db: Db, user: User) -> Result<Status> {
+    use crate::schema::assets::dsl::*;
+
+    if !user.can_write() {
+        return Ok(Status::Forbidden);
+    }
+
+    let count: usize = diesel::delete(assets.filter(id.eq(asset_id)))
+        .execute(&*db)
+        .chain_err(|| "unable to delete asset")?;
+
+    if count == 1 {
+        Ok(Status::NoContent)
+    } else {
+        Ok(Status::NotFound)
+    }
+}
+
 #[get("/<asset_id>/tags", format = "application/json")]
 pub fn tags(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Paged<Tag>>>> {
     let asset = match Asset::by_id(&*db, asset_id)? {

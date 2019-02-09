@@ -110,12 +110,14 @@ impl Bellhop {
                     views::api::v0::types::assets,
                     views::api::v0::types::create,
                     views::api::v0::types::create_tag_type,
+                    views::api::v0::types::delete_tag_type,
                 ],
             )
             .mount(
                 "/api/v0/assets/",
                 routes![
                     views::api::v0::assets::create,
+                    views::api::v0::assets::delete,
                     views::api::v0::assets::create_lease,
                     views::api::v0::assets::delete_lease,
                     views::api::v0::assets::list,
