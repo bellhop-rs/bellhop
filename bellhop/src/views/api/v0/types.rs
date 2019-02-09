@@ -110,6 +110,26 @@ pub fn create_tag_type(
     Ok(CreateTagType::Success(result))
 }
 
+#[delete("/<type_id>/tag-types/<tag_type_id>", format = "application/json")]
+pub fn delete_tag_type(type_id: i32, tag_type_id: i32, db: Db, user: User) -> Result<Status> {
+    use crate::schema::tag_types::dsl as tt;
+
+    if !user.can_write() {
+        return Ok(Status::Forbidden);
+    }
+
+    let num_deleted_rows = diesel::delete(tt::tag_types)
+        .filter(tt::id.eq(tag_type_id).and(tt::asset_type_id.eq(type_id)))
+        .execute(&*db)
+        .chain_err(|| "unable to delete tag type")?;
+
+    if num_deleted_rows == 1 {
+        Ok(Status::NoContent)
+    } else {
+        Ok(Status::NotFound)
+    }
+}
+
 #[get("/<type_id>/tag-types/<tag_type_id>", format = "application/json")]
 pub fn tag_type_detail(
     type_id: i32,
