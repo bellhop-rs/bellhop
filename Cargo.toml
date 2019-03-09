@@ -8,5 +8,8 @@ members = [
 
     "bellhop-auth-dummy",
     "bellhop-auth-header",
+
+    "bellhop-client",
+    "bellhop-cli",
 ]
-default-members = ["bellhop-demo"]
+default-members = ["bellhop-demo", "bellhop-cli"]

@@ -1,0 +1,33 @@
+mod asset;
+pub use self::asset::Asset;
+mod asset_type;
+pub use self::asset_type::AssetType;
+mod asset_types;
+pub use self::asset_types::AssetTypes;
+mod assets;
+pub use self::assets::Assets;
+mod create_asset;
+pub use self::create_asset::CreateAsset;
+mod create_asset_type;
+pub use self::create_asset_type::CreateAssetType;
+mod create_lease;
+pub use self::create_lease::CreateLease;
+mod create_tag;
+pub use self::create_tag::CreateTag;
+mod create_tag_type;
+pub use self::create_tag_type::CreateTagType;
+mod lease;
+pub use self::lease::Lease;
+mod pages;
+pub use self::pages::Pages;
+mod tag;
+pub use self::tag::Tag;
+mod tag_type;
+pub use self::tag_type::TagType;
+mod tag_types;
+pub use self::tag_types::TagTypes;
+mod tags;
+pub use self::tags::Tags;
+
+// TODO(farcaller): sort out files
+pub struct File;
