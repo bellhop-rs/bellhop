@@ -1,0 +1,20 @@
+[remote]
+## `base_path` is the prefix to use when building HTTP calls.
+base_path = "http://localhost/api/v0"
+
+## If your bellhop instance uses a self-signed certificate, add it here.
+# additional_root_certificates = [
+#   "/ca.pem",
+# ]
+
+## Identity controls how the client authenticates with the remote.
+# [remote.identity]
+
+## ClientCertificate is currently the only supported authentication.
+# type = "ClientCertificate"
+
+## Path to the PEM encoded certificate, and optionally the private key.
+# certificate = "/cert.pem"
+
+## If the private key is separate from the certificate, specify it.
+# key = "/key.pem"

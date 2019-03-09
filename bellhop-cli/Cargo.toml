@@ -1,0 +1,22 @@
+[package]
+name = "bellhop-cli"
+version = "0.2.1-dev"
+authors = ["Sam Wilson <sawilson@akamai.com>"]
+edition = "2018"
+
+[dependencies]
+reqwest = { version = "0.9", default-features = false, features = ["rustls-tls"] }
+structopt = "0.2"
+directories = "1.0"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+error-chain = "0.12"
+toml = "0.4"
+
+[dependencies.bellhop-client]
+path = "../bellhop-client"
+version = "0.2.1-dev"
+
+[dev-dependencies]
+regex = "1.0"
