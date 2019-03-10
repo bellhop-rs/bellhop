@@ -33,6 +33,7 @@ mod error {
     impl From<BellhopError> for CmdError {
         fn from(error: BellhopError) -> CmdError {
             match error {
+                BellhopError::Io(e) => CmdError::with_chain(e, CmdErrorKind::Api),
                 BellhopError::Reqwest(e) => CmdError::with_chain(e, CmdErrorKind::Api),
                 BellhopError::Serde(e) => CmdError::with_chain(e, CmdErrorKind::Api),
             }
