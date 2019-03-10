@@ -28,6 +28,3 @@ mod tag_types;
 pub use self::tag_types::TagTypes;
 mod tags;
 pub use self::tags::Tags;
-
-// TODO(farcaller): sort out files
-pub struct File;
