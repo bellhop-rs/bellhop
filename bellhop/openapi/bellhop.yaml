@@ -50,6 +50,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AssetType"
+    delete:
+      operationId: deleteAssetType
+      summary: Delete an asset type and all assets and tags associated with it
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+      responses:
+        '404':
+          description: Asset type not found
+        '204':
+          description: Asset type was deleted
   '/types/{asset_type_id}/tag-types':
     get:
       operationId: listTagTypes
@@ -256,7 +266,14 @@ paths:
           description: Asset or lease not found
         '204':
           description: Lease was deleted
+security:
+  - XBellhopEmail: []
 components:
+  securitySchemes:
+    XBellhopEmail:
+      type: apiKey
+      in: header
+      name: X-Bellhop-Email
   parameters:
     tag_type_id:
       name: tag_type_id

@@ -2,9 +2,9 @@
 //! base path.
 
 use bellhop_client::apis::client::APIClient;
-use bellhop_client::apis::configuration::Configuration;
+use bellhop_client::apis::configuration::{ApiKey, Configuration};
 
-use crate::config::{Config, Identity, Remote};
+use crate::config::{ClientCertificate, Config, Identity, Remote};
 
 use reqwest::ClientBuilder;
 
@@ -45,11 +45,7 @@ fn read(buf: &mut Vec<u8>, path: &Path) -> Result<(), ClientError> {
     Ok(())
 }
 
-fn identity(identity: &Identity) -> Result<reqwest::Identity, ClientError> {
-    let crt = match identity {
-        Identity::ClientCertificate(crt) => crt,
-    };
-
+fn client_certificate(crt: &ClientCertificate) -> Result<reqwest::Identity, ClientError> {
     let mut pem = vec![];
     read(&mut pem, &crt.certificate)?;
     if let Some(ref key) = crt.key {
@@ -73,9 +69,12 @@ fn certificate(path: &Path) -> Result<reqwest::Certificate, ClientError> {
 pub fn build(remote: &Remote, insecure: bool) -> Result<APIClient, ClientError> {
     let mut builder = ClientBuilder::new();
 
-    if let Some(ref ident) = remote.identity {
-        let reqwest_identity = identity(ident)?;
-        builder = builder.identity(reqwest_identity);
+    match remote.identity {
+        Some(Identity::ClientCertificate(ref crt)) => {
+            let reqwest_identity = client_certificate(crt)?;
+            builder = builder.identity(reqwest_identity);
+        }
+        _ => (),
     }
 
     if insecure {
@@ -91,6 +90,18 @@ pub fn build(remote: &Remote, insecure: bool) -> Result<APIClient, ClientError> 
     let mut configuration = Configuration::new();
     configuration.base_path = remote.base_path.clone();
     configuration.client = client;
+
+    match remote.identity {
+        Some(Identity::Header(ref header)) => {
+            let api_key = ApiKey {
+                prefix: None,
+                key: header.value.clone(),
+            };
+
+            configuration.api_key = Some(api_key);
+        }
+        _ => (),
+    }
 
     Ok(APIClient::new(configuration))
 }

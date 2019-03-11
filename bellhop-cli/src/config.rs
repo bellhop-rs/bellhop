@@ -126,6 +126,12 @@ pub struct Remote {
 #[serde(tag = "type")]
 pub enum Identity {
     ClientCertificate(ClientCertificate),
+    Header(Header),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Header {
+    pub value: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -167,6 +173,7 @@ mod tests {
 
         let cert = match identity {
             Identity::ClientCertificate(c) => c,
+            Identity::Header(_) => panic!("expected client certificate"),
         };
 
         assert_eq!(cert.certificate, PathBuf::from("/cert.pem"));
