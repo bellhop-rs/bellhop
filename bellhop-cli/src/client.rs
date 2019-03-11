@@ -1,3 +1,6 @@
+//! Utilities for building an `APIClient` with the given authentication and
+//! base path.
+
 use bellhop_client::apis::client::APIClient;
 use bellhop_client::apis::configuration::Configuration;
 

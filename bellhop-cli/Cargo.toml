@@ -3,6 +3,10 @@ name = "bellhop-cli"
 version = "0.2.1-dev"
 authors = ["Sam Wilson <sawilson@akamai.com>"]
 edition = "2018"
+license = "Apache-2.0"
+homepage = "https://bellhop.rs/"
+repository = "https://github.com/bellhop-rs/bellhop"
+description = "Command line tool for using Bellhop's HTTP API"
 
 [dependencies]
 reqwest = { version = "0.9", default-features = false, features = ["rustls-tls"] }

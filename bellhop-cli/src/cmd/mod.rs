@@ -1,3 +1,6 @@
+//! Root of the command line interface command "tree".
+//!
+//! Each command is implemented as a `structopt` sub-parser.
 mod asset_types;
 mod config;
 
