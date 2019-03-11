@@ -123,6 +123,24 @@ $ cargo run
 Note that `bellhop-demo` doesn't require any kind of passwords to log in. It really isn't suitable
 for production use without some customization.
 
+## Development
+
+### Generating `bellhop-client`
+
+`bellhop-client` is generated with [`openapi-generator`](https://openapi-generator.tech/).
+
+To regenerate the API client library:
+
+```bash
+$ openapi-generator generate \
+   -i bellhop/openapi/bellhop.yaml \
+   -g rust \
+   -o bellhop-client \
+   --skip-validate-spec \
+   --library reqwest \
+   --additional-properties packageName=bellhop-client
+```
+
 ## License
 
 Bellhop is licensed under:
