@@ -1,3 +1,5 @@
+//! Command for interacting with `bellhop-cli`'s configuration file. Not to be
+//! confused with `crate::config` (which is the configuration file itself.)
 use crate::config::Config as ConfigFile;
 
 use std::path::{Path, PathBuf};

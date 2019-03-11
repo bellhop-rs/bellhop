@@ -1,3 +1,4 @@
+//! Command for interacting with Bellhop's asset types.
 use bellhop_client::apis::client::APIClient;
 
 use crate::config::Config;

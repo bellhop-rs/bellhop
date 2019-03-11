@@ -1,3 +1,11 @@
+//! Configuration for `bellhop-cli` itself.
+//!
+//! Includes the actual configuration structure, and functions for loading/storing
+//! it.
+//!
+//! Uses the `directories` crate to put the configuration in the proper place
+//! depending on the operating system.
+
 use directories::ProjectDirs;
 
 pub use self::error::*;
