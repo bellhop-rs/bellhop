@@ -57,6 +57,26 @@ pub fn create(db: Db, user: User, create: Json<CreateAssetType>, base: Base) -> 
     Ok(Create::Success(result))
 }
 
+#[delete("/<type_id>")]
+pub fn delete(type_id: i32, db: Db, user: User) -> Result<Status> {
+    use crate::schema::asset_types::dsl as at;
+
+    if !user.can_write() {
+        return Ok(Status::Forbidden);
+    }
+
+    let num_deleted_rows = diesel::delete(at::asset_types)
+        .filter(at::id.eq(type_id))
+        .execute(&*db)
+        .chain_err(|| "unable to delete asset type")?;
+
+    if num_deleted_rows == 1 {
+        Ok(Status::NoContent)
+    } else {
+        Ok(Status::NotFound)
+    }
+}
+
 #[get("/<type_id>", format = "application/json")]
 pub fn detail(type_id: i32, db: Db, _user: User) -> Result<Option<Json<AssetType>>> {
     match AssetType::by_id(&*db, type_id)? {
