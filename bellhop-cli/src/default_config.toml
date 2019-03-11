@@ -10,7 +10,7 @@ base_path = "http://localhost/api/v0"
 ## Identity controls how the client authenticates with the remote.
 # [remote.identity]
 
-## ClientCertificate is currently the only supported authentication.
+## ClientCertificate authenticates using an SSL certificate.
 # type = "ClientCertificate"
 
 ## Path to the PEM encoded certificate, and optionally the private key.
