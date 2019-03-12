@@ -26,6 +26,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**create_lease**](docs/DefaultApi.md#create_lease) | **put** /assets/{asset_id}/lease | Create a new lease for this asset
 *DefaultApi* | [**create_tag**](docs/DefaultApi.md#create_tag) | **post** /assets/{asset_id}/tags | Create a new tag
 *DefaultApi* | [**create_tag_type**](docs/DefaultApi.md#create_tag_type) | **post** /types/{asset_type_id}/tag-types | Create a new tag type
+*DefaultApi* | [**delete_asset**](docs/DefaultApi.md#delete_asset) | **delete** /assets/{asset_id} | Delete an asset and all tags associated with it
 *DefaultApi* | [**delete_asset_type**](docs/DefaultApi.md#delete_asset_type) | **delete** /types/{asset_type_id} | Delete an asset type and all assets and tags associated with it
 *DefaultApi* | [**delete_lease**](docs/DefaultApi.md#delete_lease) | **delete** /assets/{asset_id}/lease | Release a lease ahead of its end time
 *DefaultApi* | [**list_asset_types**](docs/DefaultApi.md#list_asset_types) | **get** /types | List all asset types

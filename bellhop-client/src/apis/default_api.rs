@@ -48,6 +48,7 @@ pub trait DefaultApi {
         asset_type_id: i32,
         create_tag_type: ::models::CreateTagType,
     ) -> Result<::models::TagType, Error>;
+    fn delete_asset(&self, asset_id: i32) -> Result<(), Error>;
     fn delete_asset_type(&self, asset_type_id: i32) -> Result<(), Error>;
     fn delete_lease(&self, asset_id: i32) -> Result<(), Error>;
     fn list_asset_types(&self) -> Result<::models::AssetTypes, Error>;
@@ -222,6 +223,36 @@ impl DefaultApi for DefaultApiClient {
         let req = req_builder.build()?;
 
         Ok(client.execute(req)?.error_for_status()?.json()?)
+    }
+
+    fn delete_asset(&self, asset_id: i32) -> Result<(), Error> {
+        let configuration: &configuration::Configuration = self.configuration.borrow();
+        let client = &configuration.client;
+
+        let uri_str = format!(
+            "{}/assets/{asset_id}",
+            configuration.base_path,
+            asset_id = asset_id
+        );
+        let mut req_builder = client.delete(uri_str.as_str());
+
+        if let Some(ref user_agent) = configuration.user_agent {
+            req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+        }
+        if let Some(ref apikey) = configuration.api_key {
+            let key = apikey.key.clone();
+            let val = match apikey.prefix {
+                Some(ref prefix) => format!("{} {}", prefix, key),
+                None => key,
+            };
+            req_builder = req_builder.header("X-Bellhop-Email", val);
+        };
+
+        // send request
+        let req = req_builder.build()?;
+
+        client.execute(req)?.error_for_status()?;
+        Ok(())
     }
 
     fn delete_asset_type(&self, asset_type_id: i32) -> Result<(), Error> {
