@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**create_lease**](DefaultApi.md#create_lease) | **put** /assets/{asset_id}/lease | Create a new lease for this asset
 [**create_tag**](DefaultApi.md#create_tag) | **post** /assets/{asset_id}/tags | Create a new tag
 [**create_tag_type**](DefaultApi.md#create_tag_type) | **post** /types/{asset_type_id}/tag-types | Create a new tag type
+[**delete_asset**](DefaultApi.md#delete_asset) | **delete** /assets/{asset_id} | Delete an asset and all tags associated with it
 [**delete_asset_type**](DefaultApi.md#delete_asset_type) | **delete** /types/{asset_type_id} | Delete an asset type and all assets and tags associated with it
 [**delete_lease**](DefaultApi.md#delete_lease) | **delete** /assets/{asset_id}/lease | Release a lease ahead of its end time
 [**list_asset_types**](DefaultApi.md#list_asset_types) | **get** /types | List all asset types
@@ -153,6 +154,32 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_asset**
+> delete_asset(ctx, asset_id)
+Delete an asset and all tags associated with it
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context containing the authentication | nil if no authentication
+  **asset_id** | **i32**| Identifier of the asset | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[XBellhopEmail](../README.md#XBellhopEmail)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

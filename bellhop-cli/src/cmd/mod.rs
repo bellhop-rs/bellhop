@@ -2,6 +2,7 @@
 //!
 //! Each command is implemented as a `structopt` sub-parser.
 mod asset_types;
+mod assets;
 mod config;
 
 use crate::config::Config as ConfigFile;
@@ -67,6 +68,7 @@ impl Opt {
         match self.cmd {
             Cmd::Config(_) => unreachable!(),
             Cmd::AssetTypes(ref at) => at.execute(&cfg),
+            Cmd::Assets(ref a) => a.execute(&cfg),
         }
     }
 }
@@ -78,6 +80,8 @@ pub enum Cmd {
     Config(config::Config),
     #[structopt(name = "asset-types", about = "View or modify asset types")]
     AssetTypes(asset_types::AssetTypes),
+    #[structopt(name = "assets", about = "View or modify assets")]
+    Assets(assets::Assets),
 }
 
 #[derive(Debug, StructOpt)]

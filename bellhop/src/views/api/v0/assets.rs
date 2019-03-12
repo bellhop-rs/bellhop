@@ -71,7 +71,7 @@ pub fn detail(asset_id: i32, db: Db, _user: User) -> Result<Option<Json<Asset>>>
     }
 }
 
-#[delete("/<asset_id>", format = "application/json")]
+#[delete("/<asset_id>")]
 pub fn delete(asset_id: i32, db: Db, user: User) -> Result<Status> {
     use crate::schema::assets::dsl::*;
 
