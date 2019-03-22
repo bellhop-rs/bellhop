@@ -225,6 +225,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tag"
+    delete:
+      operationId: deleteTag
+      summary: Delete a tag
+      parameters:
+        - $ref: "#/components/parameters/asset_id"
+        - $ref: "#/components/parameters/tag_type_id"
+      responses:
+        '404':
+          description: Tag not found
+        '204':
+          description: Tag was deleted
   /assets/{asset_id}/lease:
     get:
       operationId: showLease

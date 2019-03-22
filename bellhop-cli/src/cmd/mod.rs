@@ -4,6 +4,7 @@
 mod asset_types;
 mod assets;
 mod config;
+mod tags;
 
 use crate::config::Config as ConfigFile;
 
@@ -69,6 +70,7 @@ impl Opt {
             Cmd::Config(_) => unreachable!(),
             Cmd::AssetTypes(ref at) => at.execute(&cfg),
             Cmd::Assets(ref a) => a.execute(&cfg),
+            Cmd::Tags(ref t) => t.execute(&cfg),
         }
     }
 }
@@ -82,6 +84,8 @@ pub enum Cmd {
     AssetTypes(asset_types::AssetTypes),
     #[structopt(name = "assets", about = "View or modify assets")]
     Assets(assets::Assets),
+    #[structopt(name = "tags", about = "View or modify tags")]
+    Tags(tags::Tags),
 }
 
 #[derive(Debug, StructOpt)]

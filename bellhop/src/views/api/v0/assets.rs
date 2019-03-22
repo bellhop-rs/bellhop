@@ -143,7 +143,7 @@ pub fn create_tag(
     Ok(Ok(result))
 }
 
-#[delete("/<asset_id>/tags/<tag_type_id>", format = "application/json")]
+#[delete("/<asset_id>/tags/<tag_type_id>")]
 pub fn delete_tag(
     asset_id: i32,
     tag_type_id: i32,
