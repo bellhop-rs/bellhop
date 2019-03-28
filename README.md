@@ -63,6 +63,7 @@ $ curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
 Bellhop uses [PostgreSQL][postgresql] as its database. Any version greater than
 or equal to 9.5 should work.
 
+## Ubuntu/Debian
 ```
 # Install the server and client libraries.
 $ sudo apt install postgresql-9.5 postgresql-client libpq-dev
@@ -72,6 +73,20 @@ $ sudo -u postgres createuser -P bellhop
 
 # Create a new database owned by the same user.
 $ sudo -u postgres createdb -O bellhop bellhop
+```
+
+## OS X (Homebrew)
+Install Homebrew at https://brew.sh/
+```
+# Install the server and client libraries.
+brew install postgres
+brew services start postgresql
+
+# Create a user, identified with a password.
+createuser -P bellhop
+
+# Create a new database owned by the same user.
+createdb -O bellhop bellhop
 ```
 
 [postgresql]: https://www.postgresql.org/
@@ -100,9 +115,9 @@ for the application to function.
 
 ```bash
 # Make sure to update this line with the password supplied earlier.
-$ export DATABASE_URL=postgres://bellhop:bellhop@localhost/bellhop
+$ export DATABASE_URL=postgres://bellhop:<password>@localhost/bellhop
 
-# Apply the core application's migrations.
+# Apply the core application's migrations. Note: `bellhop` refers to this repo's `bellhop` subdirectory.
 $ cd bellhop
 $ diesel migration run
 
