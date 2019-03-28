@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-cli"
-version = "0.2.1-dev"
+version = "0.2.1"
 authors = ["Sam Wilson <sawilson@akamai.com>"]
 edition = "2018"
 license = "Apache-2.0"
@@ -20,7 +20,7 @@ toml = "0.4"
 
 [dependencies.bellhop-client]
 path = "../bellhop-client"
-version = "0.2.1-dev"
+version = "0.2.1"
 
 [dev-dependencies]
 regex = "1.0"

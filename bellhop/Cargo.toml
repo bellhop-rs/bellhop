@@ -1,6 +1,6 @@
 [package]
 name = "bellhop"
-version = "0.2.1-dev"
+version = "0.2.1"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
