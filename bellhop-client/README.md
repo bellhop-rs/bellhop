@@ -30,6 +30,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**delete_asset_type**](docs/DefaultApi.md#delete_asset_type) | **delete** /types/{asset_type_id} | Delete an asset type and all assets and tags associated with it
 *DefaultApi* | [**delete_lease**](docs/DefaultApi.md#delete_lease) | **delete** /assets/{asset_id}/lease | Release a lease ahead of its end time
 *DefaultApi* | [**delete_tag**](docs/DefaultApi.md#delete_tag) | **delete** /assets/{asset_id}/tags/{tag_type_id} | Delete a tag
+*DefaultApi* | [**delete_tag_type**](docs/DefaultApi.md#delete_tag_type) | **delete** /types/{asset_type_id}/tag-types/{tag_type_id} | Delete a tag type and all tags associated with it
 *DefaultApi* | [**list_asset_types**](docs/DefaultApi.md#list_asset_types) | **get** /types | List all asset types
 *DefaultApi* | [**list_assets**](docs/DefaultApi.md#list_assets) | **get** /assets | List all assets
 *DefaultApi* | [**list_sub_assets**](docs/DefaultApi.md#list_sub_assets) | **get** /types/{asset_type_id}/assets | List assets that belong to an asset type

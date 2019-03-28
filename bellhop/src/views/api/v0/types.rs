@@ -130,7 +130,7 @@ pub fn create_tag_type(
     Ok(CreateTagType::Success(result))
 }
 
-#[delete("/<type_id>/tag-types/<tag_type_id>", format = "application/json")]
+#[delete("/<type_id>/tag-types/<tag_type_id>")]
 pub fn delete_tag_type(type_id: i32, tag_type_id: i32, db: Db, user: User) -> Result<Status> {
     use crate::schema::tag_types::dsl as tt;
 

@@ -109,6 +109,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TagType"
+    delete:
+      operationId: deleteTagType
+      summary: Delete a tag type and all tags associated with it
+      parameters:
+        - $ref: "#/components/parameters/asset_type_id"
+        - $ref: "#/components/parameters/tag_type_id"
+      responses:
+        '404':
+          description: Tag type not found
+        '204':
+          description: Tag type was deleted
   /types/{asset_type_id}/assets:
     get:
       operationId: listSubAssets
