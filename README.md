@@ -131,8 +131,7 @@ $ diesel migration run
 To run Bellhop in "demo" mode:
 
 ```bash
-$ cd bellhop-demo
-$ cargo run
+$ cargo run --bin bellhop-demo
 ```
 
 Note that `bellhop-demo` doesn't require any kind of passwords to log in. It really isn't suitable
