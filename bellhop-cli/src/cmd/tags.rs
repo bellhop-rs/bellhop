@@ -100,7 +100,11 @@ enum Cmd {
 
 #[derive(Debug, StructOpt)]
 struct ById {
-    #[structopt(name = "tag-type", long = "tag-type", help = "The unique identifier for the tag's type")]
+    #[structopt(
+        name = "tag-type",
+        long = "tag-type",
+        help = "The unique identifier for the tag's type"
+    )]
     tag_type: i32,
 }
 

@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**delete_asset_type**](DefaultApi.md#delete_asset_type) | **delete** /types/{asset_type_id} | Delete an asset type and all assets and tags associated with it
 [**delete_lease**](DefaultApi.md#delete_lease) | **delete** /assets/{asset_id}/lease | Release a lease ahead of its end time
 [**delete_tag**](DefaultApi.md#delete_tag) | **delete** /assets/{asset_id}/tags/{tag_type_id} | Delete a tag
+[**delete_tag_type**](DefaultApi.md#delete_tag_type) | **delete** /types/{asset_type_id}/tag-types/{tag_type_id} | Delete a tag type and all tags associated with it
 [**list_asset_types**](DefaultApi.md#list_asset_types) | **get** /types | List all asset types
 [**list_assets**](DefaultApi.md#list_assets) | **get** /assets | List all assets
 [**list_sub_assets**](DefaultApi.md#list_sub_assets) | **get** /types/{asset_type_id}/assets | List assets that belong to an asset type
@@ -246,6 +247,33 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **ctx** | **context.Context** | context containing the authentication | nil if no authentication
   **asset_id** | **i32**| Identifier of the asset | 
+  **tag_type_id** | **i32**| Identifier of the tag type | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[XBellhopEmail](../README.md#XBellhopEmail)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_tag_type**
+> delete_tag_type(ctx, asset_type_id, tag_type_id)
+Delete a tag type and all tags associated with it
+
+### Required Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ctx** | **context.Context** | context containing the authentication | nil if no authentication
+  **asset_type_id** | **i32**| Identifier of the asset type | 
   **tag_type_id** | **i32**| Identifier of the tag type | 
 
 ### Return type
