@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-demo"
-version = "0.2.1"
+version = "0.3.0-dev"
 authors = ["Sam Wilson <sawilson@akamai.com>"]
 edition = "2018"
 license = "Apache-2.0"
@@ -9,10 +9,10 @@ repository = "https://github.com/bellhop-rs/bellhop"
 description = "A demo of the bellhop asset reservation web application"
 
 [dependencies]
-bellhop = { path = "../bellhop", version = "0.2.1" }
-bellhop-auth-dummy = { path = "../bellhop-auth-dummy", version = "0.2.1" }
-bellhop-auth-header = { path = "../bellhop-auth-header", version = "0.2.1" }
-bellhop-hook-jenkins = { path = "../bellhop-hook-jenkins", version = "0.2.1" }
+bellhop = { path = "../bellhop", version = "0.3.0-dev" }
+bellhop-auth-dummy = { path = "../bellhop-auth-dummy", version = "0.3.0-dev" }
+bellhop-auth-header = { path = "../bellhop-auth-header", version = "0.3.0-dev" }
+bellhop-hook-jenkins = { path = "../bellhop-hook-jenkins", version = "0.3.0-dev" }
 
 # Cannot depend on bellhop-hook-email until lettre 0.9 releases
-#bellhop-hook-email = { path = "../bellhop-hook-email", version = "0.2.1" }
+#bellhop-hook-email = { path = "../bellhop-hook-email", version = "0.3.0-dev" }

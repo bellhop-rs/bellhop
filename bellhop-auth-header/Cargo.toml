@@ -1,6 +1,6 @@
 [package]
 name = "bellhop-auth-header"
-version = "0.2.1"
+version = "0.3.0-dev"
 authors = [
     "Joel Scarfone <jscarfon@akamai.com>",
     "Sam Wilson <sawilson@akamai.com>",
@@ -13,6 +13,6 @@ repository = "https://github.com/bellhop-rs/bellhop"
 description = "Authentication plugin for bellhop that uses an HTTP header"
 
 [dependencies]
-bellhop = { path = "../bellhop", version = "0.2.1" }
+bellhop = { path = "../bellhop", version = "0.3.0-dev" }
 regex = "1.1.0"
 rocket = "0.4.0"

@@ -108,7 +108,7 @@ dependencies = [
 
 [[package]]
 name = "bellhop"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -124,9 +124,9 @@ dependencies = [
 
 [[package]]
 name = "bellhop-auth-dummy"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop 0.2.1",
+ "bellhop 0.3.0-dev",
  "rocket 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rocket_contrib 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.87 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -135,18 +135,18 @@ dependencies = [
 
 [[package]]
 name = "bellhop-auth-header"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop 0.2.1",
+ "bellhop 0.3.0-dev",
  "regex 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rocket 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "bellhop-cli"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop-client 0.2.1",
+ "bellhop-client 0.3.0-dev",
  "directories 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "error-chain 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "bellhop-client"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
  "reqwest 0.9.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.87 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -171,19 +171,19 @@ dependencies = [
 
 [[package]]
 name = "bellhop-demo"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop 0.2.1",
- "bellhop-auth-dummy 0.2.1",
- "bellhop-auth-header 0.2.1",
- "bellhop-hook-jenkins 0.2.1",
+ "bellhop 0.3.0-dev",
+ "bellhop-auth-dummy 0.3.0-dev",
+ "bellhop-auth-header 0.3.0-dev",
+ "bellhop-hook-jenkins 0.3.0-dev",
 ]
 
 [[package]]
 name = "bellhop-hook-email"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop 0.2.1",
+ "bellhop 0.3.0-dev",
  "lettre 0.9.0 (git+https://github.com/lettre/lettre?rev=c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49)",
  "lettre_email 0.9.0 (git+https://github.com/lettre/lettre?rev=c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49)",
  "native-tls 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -194,9 +194,9 @@ dependencies = [
 
 [[package]]
 name = "bellhop-hook-jenkins"
-version = "0.2.1"
+version = "0.3.0-dev"
 dependencies = [
- "bellhop 0.2.1",
+ "bellhop 0.3.0-dev",
  "diesel 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "reqwest 0.9.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.87 (registry+https://github.com/rust-lang/crates.io-index)",
