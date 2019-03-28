@@ -15,22 +15,12 @@ description = "A bellhop hook that sends emails on certain events"
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.3.0-dev" }
 
+lettre = { version = "0.9", features = ["serde-impls", "native-tls"] }
+lettre_email = "0.9"
+
 native-tls = "0.2"
 
 rocket = "0.4.0"
 
 serde = "1.0.80"
 serde_derive = "1.0.80"
-
-[dependencies.lettre]
-# lettre 0.8 depends on an old version of openssl that isn't available on travis
-git = "https://github.com/lettre/lettre"
-version = "0.9"
-rev = "c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49"
-features = ["serde-impls", "native-tls"]
-
-[dependencies.lettre_email]
-# lettre 0.8 depends on an old version of openssl that isn't available on travis
-git = "https://github.com/lettre/lettre"
-version = "0.9"
-rev = "c988b1760ad8179d9e7f3fb8594d2b86cf2a0a49"
