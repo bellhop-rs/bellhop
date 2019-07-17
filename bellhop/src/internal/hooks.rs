@@ -4,7 +4,7 @@ use crate::hooks::{Data, Hook};
 use diesel::prelude::*;
 
 #[derive(Debug, Default)]
-pub(crate) struct Hooks(pub Vec<Box<Hook + Sync + Send>>);
+pub(crate) struct Hooks(pub Vec<Box<dyn Hook + Sync + Send>>);
 
 impl Hooks {
     pub fn returned(&self, db: &PgConnection, data: Data) -> crate::errors::Result<()> {
