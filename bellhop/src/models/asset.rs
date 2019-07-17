@@ -105,7 +105,7 @@ pub struct CreateAsset {
     type_id: i32,
 
     #[serde(default)]
-    #[default]
+    #[builder(default)]
     lease_id: Option<i32>,
 
     name: String,

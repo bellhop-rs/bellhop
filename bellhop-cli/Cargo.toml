@@ -11,12 +11,12 @@ description = "Command line tool for using Bellhop's HTTP API"
 [dependencies]
 reqwest = { version = "0.9", default-features = false, features = ["rustls-tls"] }
 structopt = "0.2"
-directories = "1.0"
+directories = "2.0"
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 error-chain = "0.12"
-toml = "0.4"
+toml = "0.5.1"
 
 [dependencies.bellhop-client]
 path = "../bellhop-client"
