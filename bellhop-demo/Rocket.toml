@@ -1,5 +1,6 @@
 [global]
 template_dir = "../bellhop/templates"
+static_files_dir = "../bellhop/static"
 
 [global.hook_email]
 from = "bellhop@example.com"

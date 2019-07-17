@@ -23,7 +23,7 @@ rocket = "0.4.0"
 serde = "1.0.80"
 serde_derive = "1.0.80"
 
-typed-builder = "0.1.1"
+typed-builder = "0.3.0"
 
 url = "1.7.2"
 url_serde = "0.2.0"

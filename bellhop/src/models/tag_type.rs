@@ -80,11 +80,11 @@ pub struct CreateTagType {
     name: String,
 
     #[serde(default)]
-    #[default]
+    #[builder(default)]
     detail_only: bool,
 
     #[serde(default)]
-    #[default]
+    #[builder(default)]
     rightness: i32,
 }
 
@@ -113,11 +113,11 @@ pub struct CreateOwnedTagType {
     name: String,
 
     #[serde(default)]
-    #[default]
+    #[builder(default)]
     detail_only: bool,
 
     #[serde(default)]
-    #[default]
+    #[builder(default)]
     rightness: i32,
 }
 
