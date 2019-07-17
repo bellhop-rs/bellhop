@@ -42,7 +42,7 @@ impl fmt::Display for ErrorKind {
 
 /// The error type that can be returned from `Auth` functions.
 #[derive(Debug)]
-pub struct Error(pub ErrorKind, Option<Box<StdError + Send>>);
+pub struct Error(pub ErrorKind, Option<Box<dyn StdError + Send>>);
 
 impl Error {
     /// Return a closure that creates a new [`Error`] from the given [`ErrorKind`].
@@ -84,8 +84,8 @@ impl fmt::Display for Error {
 }
 
 impl StdError for Error {
-    fn cause(&self) -> Option<&StdError> {
-        self.1.as_ref().map(|x| Box::as_ref(x) as &StdError)
+    fn cause(&self) -> Option<&dyn StdError> {
+        self.1.as_ref().map(|x| Box::as_ref(x) as &dyn StdError)
     }
 }
 
