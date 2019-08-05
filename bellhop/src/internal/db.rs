@@ -11,6 +11,18 @@ use std::fmt;
 #[database("bellhop")]
 pub struct Db(diesel::PgConnection);
 
+impl DbPool {
+    pub fn get(&self) -> Option<Db> {
+        self.0.get().ok().map(Db)
+    }
+}
+
+impl Clone for DbPool {
+    fn clone(&self) -> Self {
+        DbPool(self.0.clone())
+    }
+}
+
 impl fmt::Debug for Db {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Db(PgConnection)")
