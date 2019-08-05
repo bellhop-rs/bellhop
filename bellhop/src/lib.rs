@@ -78,7 +78,7 @@ impl Bellhop {
     where
         H: 'static + Send + Sync + Hook,
     {
-        self.hooks.0.push(Box::new(hook));
+        self.hooks.try_push(Box::new(hook)).unwrap();
         self
     }
 
@@ -145,7 +145,6 @@ impl Bellhop {
                     views::assets::detail
                 ],
             )
-            .mount("/", routes![views::endpoints::sheriff])
             .attach(AdHoc::on_attach("Static Files Config", |rocket| {
                 let config = rocket.config();
 
@@ -174,6 +173,9 @@ impl Bellhop {
             r = auth.prelaunch(r);
         }
 
-        r.manage(self.hooks).manage(self.auths).launch();
+        r.manage(self.hooks)
+            .manage(self.auths)
+            .attach(sheriff::Sheriff::fairing())
+            .launch();
     }
 }

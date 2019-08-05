@@ -3,8 +3,10 @@ use crate::hooks::{Data, Hook};
 
 use diesel::prelude::*;
 
-#[derive(Debug, Default)]
-pub(crate) struct Hooks(pub Vec<Box<dyn Hook + Sync + Send>>);
+use std::sync::Arc;
+
+#[derive(Debug, Default, Clone)]
+pub(crate) struct Hooks(pub Arc<Vec<Box<dyn Hook + Sync + Send>>>);
 
 impl Hooks {
     pub fn returned(&self, db: &PgConnection, data: Data) -> crate::errors::Result<()> {
@@ -48,6 +50,15 @@ impl Hooks {
                 .chain_err(|| "error running hook")?;
         }
 
+        Ok(())
+    }
+
+    pub fn try_push(&mut self, hook: Box<dyn Hook + Sync + Send>) -> crate::errors::Result<()> {
+        use crate::errors::*;
+
+        Arc::get_mut(&mut self.0)
+            .chain_err(|| "failed to push hook")?
+            .push(hook);
         Ok(())
     }
 }

@@ -26,6 +26,13 @@ table! {
 }
 
 table! {
+    sheriff (primary_key) {
+        primary_key -> Bool,
+        last_checked -> Timestamptz,
+    }
+}
+
+table! {
     tags (asset_id, tag_type_id) {
         asset_id -> Int4,
         tag_type_id -> Int4,
@@ -62,6 +69,7 @@ allow_tables_to_appear_in_same_query!(
     assets,
     asset_types,
     leases,
+    sheriff,
     tags,
     tag_types,
     users,
