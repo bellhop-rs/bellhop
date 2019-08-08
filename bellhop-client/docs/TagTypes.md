@@ -1,6 +1,7 @@
 # TagTypes
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **items** | [**Vec<::models::TagType>**](TagType.md) |  | 

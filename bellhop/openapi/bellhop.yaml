@@ -365,6 +365,7 @@ components:
         end_time:
           type: string
           format: date-time
+          nullable: true
     Lease:
       required:
         - id
@@ -385,6 +386,7 @@ components:
         end_time:
           type: string
           format: date-time
+          nullable: true
         start_time:
           type: string
           format: date-time

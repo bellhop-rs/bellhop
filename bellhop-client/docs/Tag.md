@@ -1,6 +1,7 @@
 # Tag
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **asset_id** | **i32** |  | 
