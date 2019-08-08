@@ -1,6 +1,7 @@
 # Assets
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **items** | [**Vec<::models::Asset>**](Asset.md) |  | 

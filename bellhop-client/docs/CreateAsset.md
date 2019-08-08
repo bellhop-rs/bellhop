@@ -1,6 +1,7 @@
 # CreateAsset
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type_id** | **i32** |  | 

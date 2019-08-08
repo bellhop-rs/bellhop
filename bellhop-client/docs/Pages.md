@@ -1,6 +1,7 @@
 # Pages
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **next** | **String** |  | 
