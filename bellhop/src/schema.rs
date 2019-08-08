@@ -21,7 +21,7 @@ table! {
         user_id -> Int4,
         last_notified -> Nullable<Timestamptz>,
         start_time -> Timestamptz,
-        end_time -> Timestamptz,
+        end_time -> Nullable<Timestamptz>,
     }
 }
 

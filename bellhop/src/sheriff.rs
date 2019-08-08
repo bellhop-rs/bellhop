@@ -143,14 +143,16 @@ fn send_eviction_notices(c: &PgConnection, hooks: &Hooks) -> Result<()> {
 
     let all_leases: Vec<Lease> = l::leases
         .filter(l::last_notified.is_null())
+        .filter(l::end_time.is_not_null())
         .load::<Lease>(c)
         .chain_err(|| "failed to get leases for eviction notices")?;
 
     for lease in all_leases {
-        let time_left = lease.end_time() - lease.start_time();
+        let end_time = lease.end_time().unwrap();
+        let time_left = end_time - lease.start_time();
         let margin = time_left / 20;
 
-        if now > (lease.end_time() - margin) {
+        if now > (end_time - margin) {
             // TODO: This is an N+1 queries bug
             let (asset, asset_type): (Asset, AssetType) = Asset::belonging_to(&lease)
                 .inner_join(at::asset_types)

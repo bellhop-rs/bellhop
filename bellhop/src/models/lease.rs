@@ -25,7 +25,7 @@ pub struct Lease {
 
     last_notified: Option<DateTime<Utc>>,
     start_time: DateTime<Utc>,
-    end_time: DateTime<Utc>,
+    end_time: Option<DateTime<Utc>>,
 }
 
 impl Lease {
@@ -62,7 +62,7 @@ impl Lease {
     }
 
     /// When this `Lease` is expected to end.
-    pub fn end_time(&self) -> DateTime<Utc> {
+    pub fn end_time(&self) -> Option<DateTime<Utc>> {
         self.end_time
     }
 }
@@ -93,7 +93,7 @@ pub struct CreateLease {
     user_id: i32,
 
     start_time: DateTime<Utc>,
-    end_time: DateTime<Utc>,
+    end_time: Option<DateTime<Utc>>,
 }
 
 impl CreateLease {
@@ -108,7 +108,7 @@ impl CreateLease {
     }
 
     /// When the new `Lease` will end.
-    pub fn end_time(&self) -> DateTime<Utc> {
+    pub fn end_time(&self) -> Option<DateTime<Utc>> {
         self.end_time
     }
 
@@ -153,19 +153,19 @@ impl<'v> FromFormValue<'v> for DateField {
 
 #[derive(Debug, FromForm, Deserialize)]
 pub(crate) struct CreateLeaseForm {
-    end_time: DateField,
+    end_time: Option<DateField>,
 }
 
 impl CreateLeaseForm {
-    pub fn end_time(&self) -> DateTime<Utc> {
-        self.end_time.0
+    pub fn end_time(&self) -> Option<DateTime<Utc>> {
+        self.end_time.map(|x| x.0)
     }
 
     pub fn into_create_lease(self, user_id: i32) -> CreateLease {
         CreateLease::builder()
             .user_id(user_id)
             .start_time(Utc::now())
-            .end_time(self.end_time.0)
+            .end_time(self.end_time.map(|x| x.0))
             .build()
     }
 }
