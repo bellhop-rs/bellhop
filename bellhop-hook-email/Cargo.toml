@@ -15,7 +15,7 @@ description = "A bellhop hook that sends emails on certain events"
 [dependencies]
 bellhop = { path = "../bellhop", version = "0.3.0-dev" }
 
-lettre = { version = "0.9", features = ["serde-impls", "native-tls"] }
+lettre = { version = "0.9.6", features = ["serde-impls", "native-tls"] }
 lettre_email = "0.9"
 
 native-tls = "0.2"
